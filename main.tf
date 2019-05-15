@@ -58,6 +58,12 @@ resource "aws_iam_role_policy_attachment" "base_policy_attach" {
   policy_arn = "${data.aws_iam_policy.base_policy.arn}"
 }
 
+resource "aws_iam_role_policy_attachment" "vpc_policy_attach" {
+  count     = "${length(var.subnet_ids) > 0 ? 1 : 0}"
+  role      = "${aws_iam_role.iam_for_lambda.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
 ## Lambda
 resource "aws_lambda_alias" "alias" {
   name             = "${upper(var.stage)}"
@@ -119,3 +125,5 @@ output "arn" {
 output "function_name" {
   value = "${aws_lambda_function.lambda.function_name}"
 }
+
+
