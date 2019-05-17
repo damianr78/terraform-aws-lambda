@@ -111,6 +111,9 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   event_source_arn  = "${data.aws_dynamodb_table.dynamodb_table.stream_arn}"
   function_name     = "${aws_lambda_function.lambda.arn}:${upper(var.stage)}"
   starting_position = "${var.dynamodb_trigger_starting_position}"
+  depends_on = [
+    "aws_lambda_alias.alias"
+  ]
 }
 
 data "aws_dynamodb_table" "dynamodb_table" {
