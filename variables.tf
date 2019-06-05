@@ -95,7 +95,12 @@ variable "runtime" {
   default = "java8"
 }
 
-variable "dead_letter_queue_arn" {
-  description = "Dead letter queue ARN if is necessary"
+variable "dead_letter_queue_name" {
+  description = "Dead letter queue name without environment"
   default = ""
+}
+
+variable "dead_letter_queue_resource" {
+  description = "Dead letter queue resource. Only sqs and sns are allowed"
+  default = "sqs"
 }

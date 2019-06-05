@@ -67,8 +67,8 @@ resource "aws_iam_role_policy_attachment" "vpc_policy_attach" {
 ## Lambda
 resource "aws_lambda_alias" "alias" {
   name             = "${upper(var.stage)}"
-  function_name    = "${aws_lambda_function.lambda.arn}"
-  function_version = "${aws_lambda_function.lambda.version}"
+  function_name    = "${local.arn}"
+  function_version = "${local.version}"
   description = "${upper(var.stage)} VERSION ${var.artifact_version} - ${trimspace(replace(timestamp(), "/[A-Z]/", " "))}"
   lifecycle {
     ignore_changes = ["description"]
@@ -76,6 +76,7 @@ resource "aws_lambda_alias" "alias" {
 }
 
 resource "aws_lambda_function" "lambda" {
+  count = "${var.dead_letter_queue_name == "" ? 1 : 0}"
   function_name = "${var.function_name}"
   description   = "${var.function_description}"
   s3_bucket     = "${data.aws_s3_bucket.artifacts.id}"
@@ -96,11 +97,36 @@ resource "aws_lambda_function" "lambda" {
   }
 }
 
+resource "aws_lambda_function" "lambda_with_dlq" {
+  count = "${var.dead_letter_queue_name != "" ? 1 : 0}"
+  function_name = "${var.function_name}"
+  description   = "${var.function_description}"
+  s3_bucket     = "${data.aws_s3_bucket.artifacts.id}"
+  s3_key        = "${var.artifact_key_prefix}/${var.artifact_name}/${var.artifact_version}/${var.artifact_name}.zip"
+  role          = "${aws_iam_role.iam_for_lambda.arn}"
+  runtime       = "${var.runtime}"
+  handler       = "${var.function_handler}"
+  timeout       = "${var.timeout}"
+  memory_size   = "${var.memory_size}"
+  publish       = true
+  source_code_hash = "${replace(data.aws_s3_bucket_object.hash.body, "/\n$/", "")}"
+  vpc_config {
+    security_group_ids = "${var.security_group_ids}"
+    subnet_ids = "${var.subnet_ids}"
+  }
+  environment = {
+    variables = "${var.environment_variables}"
+  }
+  dead_letter_config {
+    target_arn = "arn:aws:${var.dead_letter_queue_resource}:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:${var.dead_letter_queue_name}-${upper(var.stage)}"
+  }
+}
+
 resource "aws_lambda_permission" "allow_invocation_from_resource" {
   count = "${var.permission_statement_id != "" ? 1 : 0}"
   statement_id  = "${var.permission_statement_id}"
   action        = "lambda:InvokeFunction"
-  function_name =  "${aws_lambda_function.lambda.function_name}"
+  function_name =  "${local.function_name}"
   principal     = "${var.permission_resource}.amazonaws.com"
   source_arn    = "${var.permission_source_arn}"
   qualifier     = "${upper(var.stage)}"
@@ -109,7 +135,7 @@ resource "aws_lambda_permission" "allow_invocation_from_resource" {
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   count = "${var.dynamodb_trigger_table_name != "" ? 1 : 0}"
   event_source_arn  = "${data.aws_dynamodb_table.dynamodb_table.stream_arn}"
-  function_name     = "${aws_lambda_function.lambda.arn}:${upper(var.stage)}"
+  function_name     = "${local.arn}:${upper(var.stage)}"
   starting_position = "${var.dynamodb_trigger_starting_position}"
   depends_on = [
     "aws_lambda_alias.alias"
@@ -121,12 +147,16 @@ data "aws_dynamodb_table" "dynamodb_table" {
   name = "${lower(var.stage)}${title(var.dynamodb_trigger_table_name)}"
 }
 
+locals {
+  function_name = "${element(concat(aws_lambda_function.lambda.*.function_name, aws_lambda_function.lambda_with_dlq.*.function_name), 0)}"
+  arn = "${element(concat(aws_lambda_function.lambda.*.arn, aws_lambda_function.lambda_with_dlq.*.arn), 0)}"
+  version = "${element(concat(aws_lambda_function.lambda.*.version, aws_lambda_function.lambda_with_dlq.*.version), 0)}"
+}
+
 output "arn" {
-  value = "${aws_lambda_function.lambda.arn}"
+  value = "${local.arn}"
 }
 
 output "function_name" {
-  value = "${aws_lambda_function.lambda.function_name}"
+  value = "${local.function_name}"
 }
-
-
