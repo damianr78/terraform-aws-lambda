@@ -1,3 +1,8 @@
+## 1.4
+### Update
+- Begin using terraform-lambda for naming-conventions
+- Change variable stage to environment
+
 ## 1.3
 ### Added
 - New resource is created instead of original lambda resource to add DLQ if dead_letter_queue_name variable is set

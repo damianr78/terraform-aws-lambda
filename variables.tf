@@ -2,16 +2,12 @@ variable "artifacts_bucket" {
   description = "S3 Bucket containing the lambda zip files"
 }
 
-variable "artifact_name" {
-  description = "The name of the artifact (zip file) to be deployed without the .zip extension"
+variable "artifact_id" {
+  description = "The id of the artifact (zip file) to be deployed without the .zip extension"
 }
 
-variable "stage" {
-  description = "Stage name to use on all resources created (API-Gateway, Lambdas, etc.)"
-}
-
-variable "function_name" {
-  description = "Name of the lambda function"
+variable "environment" {
+  description = "Environment name to use on all resources created (API-Gateway, Lambdas, etc.)"
 }
 
 variable "function_description" {
@@ -32,6 +28,7 @@ variable "function_handler" {
 }
 
 variable "artifact_version" {
+  type = "string"
   description = "Version of the lambdas artifact"
   default = "SNAPSHOT"
 }
