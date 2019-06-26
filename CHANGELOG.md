@@ -1,5 +1,9 @@
+## 2.0
+### Updated
+- Migration to terraform 0.12
+
 ## 1.4
-### Update
+### Updated
 - Begin using terraform-lambda for naming-conventions
 - Change variable stage to environment
 

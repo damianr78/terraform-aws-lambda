@@ -28,76 +28,77 @@ variable "function_handler" {
 }
 
 variable "artifact_version" {
-  type = "string"
+  type        = string
   description = "Version of the lambdas artifact"
-  default = "SNAPSHOT"
+  default     = "SNAPSHOT"
 }
 
 variable "environment_variables" {
-  type = "map"
+  type = map(string)
   default = {
     "default" = "default_variable"
   }
 }
 
 variable "security_group_ids" {
-  type = "list"
+  type        = list(string)
   description = "Security groups ids for VPC"
-  default = []
+  default     = []
 }
 
 variable "subnet_ids" {
-  type = "list"
+  type        = list(string)
   description = "Subnet ids for VPC"
-  default = []
+  default     = []
 }
 
 variable "dynamodb_trigger_table_name" {
   description = "Table name if the lambda is a dynamodb trigger"
-  default = ""
+  default     = ""
 }
 
 variable "dynamodb_trigger_starting_position" {
   description = "Starting position for dynamodb trigger"
-  default = "LATEST"
+  default     = "LATEST"
 }
 
 variable "permission_statement_id" {
   description = "Statement id for lambda execution permission"
-  default = ""
+  default     = ""
 }
 
 variable "permission_resource" {
   description = "Resource for permission statement (only sns, apigateway, s3 or cloudwatch are allowed)"
-  default = ""
+  default     = ""
 }
 
 variable "permission_source_arn" {
   description = "Source ARN for permission"
-  default = ""
+  default     = ""
 }
 
 variable "timeout" {
   description = "Lambda timeout time in seconds"
-  default = "900"
+  default     = "900"
 }
 
 variable "memory_size" {
   description = "Lambda's size"
-  default = "512"
+  default     = "512"
 }
 
 variable "runtime" {
   description = "Runtime language for lambda"
-  default = "java8"
+  default     = "java8"
 }
 
 variable "dead_letter_queue_name" {
   description = "Dead letter queue name without environment"
-  default = ""
+  default     = ""
 }
 
 variable "dead_letter_queue_resource" {
   description = "Dead letter queue resource. Only sqs and sns are allowed"
-  default = "sqs"
+  default     = "sqs"
 }
+
