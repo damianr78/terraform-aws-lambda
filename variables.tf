@@ -109,6 +109,6 @@ variable "dead_letter_queue_resource" {
 
 variable "warm_up_available_environments" {
   type        = list(string)
-  description = "Enviroments where warm up will be created"
+  description = "Environments where warm up will be created"
   default     = ["PROD", "STAGE"]
 }
