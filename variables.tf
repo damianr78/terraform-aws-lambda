@@ -33,6 +33,11 @@ variable "artifact_version" {
   default     = "SNAPSHOT"
 }
 
+variable "function_name" {
+  type        = string
+  description = "Lambda function name"
+}
+
 variable "environment_variables" {
   type = map(string)
   default = {
@@ -102,3 +107,8 @@ variable "dead_letter_queue_resource" {
   default     = "sqs"
 }
 
+variable "warm_up_available_environments" {
+  type        = list(string)
+  description = "Enviroments where warm up will be created"
+  default     = ["PROD", "STAGE"]
+}
