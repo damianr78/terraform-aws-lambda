@@ -102,3 +102,7 @@ variable "dead_letter_queue_resource" {
   default     = "sqs"
 }
 
+variable "use_configs_table" {
+  description = "Flag to enable use to configs table"
+  default = true
+}

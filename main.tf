@@ -62,6 +62,8 @@ resource "aws_iam_role_policy_attachment" "policy_attach" {
 }
 
 resource "aws_iam_role_policy_attachment" "base_policy_attach" {
+
+  count = var.use_configs_table ? 1 : 0
   role = aws_iam_role.iam_for_lambda.name
   policy_arn = data.aws_iam_policy.base_policy.arn
 }
