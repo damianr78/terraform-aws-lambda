@@ -128,7 +128,7 @@ resource "aws_lambda_function" "lambda_with_dlq" {
     variables = var.environment_variables
   }
   dead_letter_config {
-    target_arn = "arn:aws:${var.dead_letter_queue_resource}:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:${var.dead_letter_queue_name}-${module.lambda-label.environment_upper}"
+    target_arn = "arn:aws:${var.dead_letter_queue_resource}:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:${var.dead_letter_queue_name}"
   }
 }
 
@@ -171,4 +171,3 @@ locals {
     0,
   )
 }
-

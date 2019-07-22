@@ -29,6 +29,8 @@ module "dynamodb_table" {
 ```
 
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 
 ## Inputs
 
@@ -38,7 +40,7 @@ module "dynamodb_table" {
 | artifact\_key\_prefix | Prefix corresponding to the folder for the artifact in s3 | string | n/a | yes |
 | artifact\_version | Version of the lambdas artifact | string | `"SNAPSHOT"` | no |
 | artifacts\_bucket | S3 Bucket containing the lambda zip files | string | n/a | yes |
-| dead\_letter\_queue\_name | Dead letter queue name without environment | string | `""` | no |
+| dead\_letter\_queue\_name | Dead letter queue name including environment name | string | `""` | no |
 | dead\_letter\_queue\_resource | Dead letter queue resource. Only sqs and sns are allowed | string | `"sqs"` | no |
 | dynamodb\_trigger\_starting\_position | Starting position for dynamodb trigger | string | `"LATEST"` | no |
 | dynamodb\_trigger\_table\_name | Table name if the lambda is a dynamodb trigger | string | `""` | no |
@@ -62,3 +64,6 @@ module "dynamodb_table" {
 |------|-------------|
 | arn |  |
 | function\_name |  |
+
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

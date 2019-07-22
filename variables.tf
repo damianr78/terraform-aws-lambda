@@ -93,7 +93,7 @@ variable "runtime" {
 }
 
 variable "dead_letter_queue_name" {
-  description = "Dead letter queue name without environment"
+  description = "Dead letter queue name including environment name"
   default     = ""
 }
 
@@ -104,5 +104,5 @@ variable "dead_letter_queue_resource" {
 
 variable "use_configs_table" {
   description = "Flag to enable use to configs table"
-  default = true
+  default     = true
 }
