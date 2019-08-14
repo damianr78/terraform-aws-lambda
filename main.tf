@@ -23,29 +23,20 @@ data "aws_s3_bucket_object" "hash" {
 }
 
 ## Permissions
-data "aws_iam_policy" "base_policy" {
-  arn = "arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/Lambda_${module.lambda-label.environment_lower}Configs_Policy"
-}
 
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "${module.lambda-label.function_name}Role-${module.lambda-label.environment_lower}"
+module "lambda_role" {
+  source            = "git@github.com:Bancar/terraform-aws-iam-roles.git?ref=tags/1.7"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+  environment       = var.environment
+  account_id        = data.aws_caller_identity.current_caller.account_id
 
+  assume_role_index = "LAMBDA"
+  role_name         = "${module.lambda-label.function_name}Role-${module.lambda-label.environment_lower}"
+
+  policies_arn = concat(
+    local.vpc_policy,
+    [aws_iam_policy.policy[0].arn, coalesce(var.base_policy_arn, "arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/iam_p_lambda_configs")]
+  )
 }
 
 resource "aws_iam_policy" "policy" {
@@ -53,25 +44,6 @@ resource "aws_iam_policy" "policy" {
   name = "${module.lambda-label.function_name}Policy-${module.lambda-label.environment_lower}"
 
   policy = var.lambda_policy_json
-}
-
-resource "aws_iam_role_policy_attachment" "policy_attach" {
-  count = var.lambda_policy_json != "" ? 1 : 0
-  role = aws_iam_role.iam_for_lambda.name
-  policy_arn = aws_iam_policy.policy[0].arn
-}
-
-resource "aws_iam_role_policy_attachment" "base_policy_attach" {
-
-  count = var.use_configs_table ? 1 : 0
-  role = aws_iam_role.iam_for_lambda.name
-  policy_arn = data.aws_iam_policy.base_policy.arn
-}
-
-resource "aws_iam_role_policy_attachment" "vpc_policy_attach" {
-  count = length(var.subnet_ids) > 0 ? 1 : 0
-  role = aws_iam_role.iam_for_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 ## Lambda
@@ -91,7 +63,7 @@ resource "aws_lambda_function" "lambda" {
   description = var.function_description
   s3_bucket = data.aws_s3_bucket.artifacts.id
   s3_key = "${var.artifact_key_prefix}/${module.lambda-label.artifact_id}/${module.lambda-label.artifact_version}/${module.lambda-label.artifact_id}.zip"
-  role = aws_iam_role.iam_for_lambda.arn
+  role = module.lambda_role.role_arn[0]
   runtime = var.runtime
   handler = var.function_handler
   timeout = var.timeout
@@ -113,7 +85,7 @@ resource "aws_lambda_function" "lambda_with_dlq" {
   description = var.function_description
   s3_bucket = data.aws_s3_bucket.artifacts.id
   s3_key = "${var.artifact_key_prefix}/${module.lambda-label.artifact_id}/${module.lambda-label.artifact_version}/${module.lambda-label.artifact_id}.zip"
-  role = aws_iam_role.iam_for_lambda.arn
+  role = module.lambda_role.role_arn[0]
   runtime = var.runtime
   handler = var.function_handler
   timeout = var.timeout
@@ -156,18 +128,17 @@ data "aws_dynamodb_table" "dynamodb_table" {
 }
 
 locals {
-  arn = element(
-    concat(
+  arn = concat(
       aws_lambda_function.lambda.*.arn,
       aws_lambda_function.lambda_with_dlq.*.arn,
-    ),
-    0,
-  )
-  version = element(
-    concat(
+    )[0]
+  invoke_arn = concat(
+      aws_lambda_function.lambda.*.invoke_arn,
+      aws_lambda_function.lambda_with_dlq.*.invoke_arn,
+    )[0]
+  version = concat(
       aws_lambda_function.lambda.*.version,
       aws_lambda_function.lambda_with_dlq.*.version,
-    ),
-    0,
-  )
+    )[0]
+  vpc_policy = length(var.subnet_ids) > 0 ? ["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] : []
 }

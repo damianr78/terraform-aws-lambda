@@ -106,3 +106,8 @@ variable "use_configs_table" {
   description = "Flag to enable use to configs table"
   default     = true
 }
+
+variable "base_policy_arn" {
+  description = "Base policy ARN to allow lambda to access logs and configs table"
+  default     = ""
+}
