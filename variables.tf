@@ -30,7 +30,7 @@ variable "function_handler" {
 variable "artifact_version" {
   type        = string
   description = "Version of the lambdas artifact"
-  default     = "SNAPSHOT"
+  default     = ""
 }
 
 variable "environment_variables" {

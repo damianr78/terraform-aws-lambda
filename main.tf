@@ -3,7 +3,7 @@ module "lambda-label" {
   source           = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.0"
   environment      = var.environment
   artifact_id      = var.artifact_id
-  artifact_version = var.artifact_version
+  artifact_version = coalesce(var.artifact_version, local.artifact_version)
 }
 
 data "aws_region" "current_region" {
@@ -15,6 +15,15 @@ data "aws_caller_identity" "current_caller" {
 ## S3
 data "aws_s3_bucket" "artifacts" {
   bucket = var.artifacts_bucket
+}
+
+data "aws_s3_bucket_objects" "lambda_builds" {
+  bucket = var.artifacts_bucket
+}
+
+locals {
+  keys = [for k in data.aws_s3_bucket_objects.lambda_builds.keys: k if contains(split("/", k), var.artifact_key_prefix) && contains(split("/", k), module.lambda-label.artifact_id)]
+  artifact_version = sort([for k in local.keys: split("/", k)[2]])[length(local.keys) - 1]
 }
 
 data "aws_s3_bucket_object" "hash" {
