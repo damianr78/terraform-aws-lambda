@@ -1,5 +1,9 @@
-variable "artifacts_bucket" {
+variable "product_bucket" {
   description = "S3 Bucket containing the lambda zip files"
+}
+
+variable "repo_name" {
+  description = "Name of repository who contains JAVA code of lambda"
 }
 
 variable "artifact_id" {
@@ -14,10 +18,6 @@ variable "function_description" {
   description = "Description of the lambda function"
 }
 
-variable "artifact_key_prefix" {
-  description = "Prefix corresponding to the folder for the artifact in s3"
-}
-
 variable "lambda_policy_json" {
   description = "Policy's json for the lambda"
 }
@@ -30,7 +30,6 @@ variable "function_handler" {
 variable "artifact_version" {
   type        = string
   description = "Version of the lambdas artifact"
-  default     = ""
 }
 
 variable "environment_variables" {
