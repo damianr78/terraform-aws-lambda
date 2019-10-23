@@ -32,10 +32,6 @@ data "aws_s3_bucket_object" "hash" {
   key    = "${local.bucket_path}/${module.lambda-label.artifact_id}.hash"
 }
   
-resource "random_id" "random" {
-  byte_length = 8
-}  
-
 ## Permissions
 module "lambda_role" {
   source            = "git@github.com:Bancar/terraform-aws-iam-roles.git?ref=tags/1.7"
