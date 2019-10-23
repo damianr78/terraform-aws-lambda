@@ -31,6 +31,10 @@ data "aws_s3_bucket_object" "hash" {
   bucket = var.product_bucket
   key    = "${local.bucket_path}/${module.lambda-label.artifact_id}.hash"
 }
+  
+resource "random_id" "random" {
+  byte_length = 8
+}  
 
 ## Permissions
 module "lambda_role" {
@@ -117,13 +121,13 @@ resource "aws_lambda_function" "lambda_with_dlq" {
 }
 
 resource "aws_lambda_permission" "allow_invocation_from_resource" {
-  count           = var.permission_statement_id != "" ? 1 : 0
+  count           = length(var.permissions_to_invoke)
   
-  statement_id    = var.permission_statement_id
+  statement_id    = var.permissions_to_invoke[count.index].statement_id
   action          = "lambda:InvokeFunction"
   function_name   = module.lambda-label.function_name
-  principal       = "${var.permission_resource}.amazonaws.com"
-  source_arn      = var.permission_source_arn
+  principal       = "${var.permissions_to_invoke[count.index].principal_resource}.amazonaws.com"
+  source_arn      = var.permissions_to_invoke[count.index].source_arn
   qualifier       = module.lambda-label.environment_upper
 }
 
@@ -137,6 +141,16 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   depends_on        = [
     aws_lambda_alias.alias
   ]
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
+  count         = var.rule_arn == "" ? 0 : 1
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.lambda-label.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.rule_arn
+  qualifier       = module.lambda-label.environment_upper
 }
 
 data "aws_dynamodb_table" "dynamodb_table" {

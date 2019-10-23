@@ -61,19 +61,10 @@ variable "dynamodb_trigger_starting_position" {
   default     = "LATEST"
 }
 
-variable "permission_statement_id" {
-  description = "Statement id for lambda execution permission"
-  default     = ""
-}
-
-variable "permission_resource" {
-  description = "Resource for permission statement (only sns, apigateway, s3 or cloudwatch are allowed)"
-  default     = ""
-}
-
-variable "permission_source_arn" {
-  description = "Source ARN for permission"
-  default     = ""
+variable "permissions_to_invoke" {
+  description = "List of objects describing permisions to invoke lambda (for principal resource: only sns, apigateway, s3 or cloudwatch are allowed) source_arn is the arn of the resource invoking the lambda"
+  type = list(object({statement_id: string, principal_resource: string, source_arn: string}))
+  default     = []
 }
 
 variable "timeout" {
@@ -108,5 +99,10 @@ variable "use_configs_table" {
 
 variable "base_policy_arn" {
   description = "Base policy ARN to allow lambda to access logs and configs table"
+  default     = ""
+}
+
+variable "rule_arn" {
+  description = "arn of rule"
   default     = ""
 }
