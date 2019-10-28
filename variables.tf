@@ -18,8 +18,8 @@ variable "function_description" {
   description = "Description of the lambda function"
 }
 
-variable "lambda_policy_json" {
-  description = "Policy's json for the lambda"
+variable "lambda_policy_path" {
+  description = "Policy's tpl path for the lambda"
 }
 
 variable "function_handler" {
@@ -105,4 +105,10 @@ variable "base_policy_arn" {
 variable "rule_arn" {
   description = "arn of rule"
   default     = ""
+}
+
+variable "policy_lambda_vars" {
+  type        = map(string)
+  default     = {}
+  description = "Optional Custom vars map for a policy"
 }

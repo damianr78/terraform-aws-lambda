@@ -34,7 +34,7 @@ data "aws_s3_bucket_object" "hash" {
   
 ## Permissions
 module "lambda_role" {
-  source            = "git@github.com:Bancar/terraform-aws-iam-roles.git?ref=tags/1.7"
+  source            = "git@github.com:Bancar/terraform-aws-iam-roles.git?ref=tags/1.9"
 
   environment       = var.environment
   account_id        = data.aws_caller_identity.current_caller.account_id
@@ -44,15 +44,11 @@ module "lambda_role" {
 
   policies_arn = concat(
     local.vpc_policy,
-    [aws_iam_policy.policy[0].arn, coalesce(var.base_policy_arn, "arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/iam_p_lambda_configs")]
+    [coalesce(var.base_policy_arn, "arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/iam_p_lambda_configs")]
   )
-}
 
-resource "aws_iam_policy" "policy" {
-  count   = var.lambda_policy_json != "" ? 1 : 0
-  
-  name    = "${module.lambda-label.function_name}Policy-${module.lambda-label.environment_lower}"
-  policy  = var.lambda_policy_json
+  custom_policies = [var.lambda_policy_path]
+  policy_custom_vars = var.policy_lambda_vars
 }
 
 ## Lambda
@@ -65,6 +61,7 @@ resource "aws_lambda_alias" "alias" {
   lifecycle {
     ignore_changes = [description]
   }
+
 }
 
 resource "aws_lambda_function" "lambda" {
@@ -88,6 +85,10 @@ resource "aws_lambda_function" "lambda" {
   environment {
     variables = var.environment_variables
   }
+
+  depends_on = [
+    module.lambda_role
+  ]
 }
 
 resource "aws_lambda_function" "lambda_with_dlq" {
@@ -114,6 +115,10 @@ resource "aws_lambda_function" "lambda_with_dlq" {
   dead_letter_config {
     target_arn = "arn:aws:${var.dead_letter_queue_resource}:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:${var.dead_letter_queue_name}"
   }
+
+  depends_on = [
+    module.lambda_role
+  ]
 }
 
 resource "aws_lambda_permission" "allow_invocation_from_resource" {
@@ -125,6 +130,13 @@ resource "aws_lambda_permission" "allow_invocation_from_resource" {
   principal       = "${var.permissions_to_invoke[count.index].principal_resource}.amazonaws.com"
   source_arn      = var.permissions_to_invoke[count.index].source_arn
   qualifier       = module.lambda-label.environment_upper
+
+  depends_on        = [
+    aws_lambda_function.lambda_with_dlq,
+    aws_lambda_function.lambda
+
+  ]
+
 }
 
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
@@ -146,11 +158,18 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
   function_name = module.lambda-label.function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.rule_arn
-  qualifier       = module.lambda-label.environment_upper
+  qualifier     = module.lambda-label.environment_upper
+
+  depends_on        = [
+    aws_lambda_function.lambda_with_dlq,
+    aws_lambda_function.lambda
+  ]
+
 }
 
 data "aws_dynamodb_table" "dynamodb_table" {
   count = var.dynamodb_trigger_table_name != "" ? 1 : 0
   
   name  = "${module.lambda-label.environment_lower}${title(var.dynamodb_trigger_table_name)}"
+
 }
