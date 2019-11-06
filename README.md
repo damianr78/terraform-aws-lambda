@@ -57,6 +57,7 @@ module "dynamodb_table" {
 | security\_group\_ids | Security groups ids for VPC | list | `<list>` | no |
 | subnet\_ids | Subnet ids for VPC | list | `<list>` | no |
 | timeout | Lambda timeout time in seconds | string | `"900"` | no |
+| tags | A map of tags to add to IAM role resources | map(string) | {} | no |
 
 ## Outputs
 

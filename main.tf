@@ -20,10 +20,11 @@ locals {
 }
 
 module "lambda-label" {
-  source           = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.0"
+  source           = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.4"
   environment      = var.environment
   artifact_id      = var.artifact_id
   artifact_version = var.artifact_version
+  tags             = var.tags
 }
 
 ## S3
@@ -49,6 +50,8 @@ module "lambda_role" {
 
   custom_policies = [var.lambda_policy_path]
   policy_custom_vars = var.policy_lambda_vars
+
+  tags              = var.tags
 }
 
 ## Lambda
@@ -89,6 +92,8 @@ resource "aws_lambda_function" "lambda" {
   depends_on = [
     module.lambda_role
   ]
+
+  tags              = module.lambda-label.tags
 }
 
 resource "aws_lambda_function" "lambda_with_dlq" {
@@ -115,6 +120,8 @@ resource "aws_lambda_function" "lambda_with_dlq" {
   dead_letter_config {
     target_arn = "arn:aws:${var.dead_letter_queue_resource}:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:${var.dead_letter_queue_name}"
   }
+
+  tags              = module.lambda-label.tags
 
   depends_on = [
     module.lambda_role

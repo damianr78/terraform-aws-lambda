@@ -107,6 +107,12 @@ variable "rule_arn" {
   default     = ""
 }
 
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)"
+}
+
 variable "policy_lambda_vars" {
   type        = map(string)
   default     = {}

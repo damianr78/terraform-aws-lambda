@@ -1,3 +1,7 @@
+## 2.10
+### Updated
+- Tag all resources
+
 ## 2.0
 ### Updated
 - Migration to terraform 0.12
