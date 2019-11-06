@@ -1,6 +1,40 @@
-## 2.10
+## 2.9
 ### Updated
 - Tag all resources
+### Added
+- Warm up
+
+## 2.8
+### Added
+- Add depens on to create resources
+
+## 2.7
+### Updated
+- remove random id
+
+## 2.6
+### Updated
+- Change to new structure bucket to save .zip and .hash
+
+## 2.5
+### Updated
+- Load artifact version dynamically
+
+## 2.4
+### Added
+- Add outputs for Alias invoke arn and name 
+
+## 2.3
+### Updated
+- Use iam role module
+
+## 2.2
+### Updated 
+- Update dlq config
+
+## 2.1
+### Added 
+- New flag to use config table
 
 ## 2.0
 ### Updated

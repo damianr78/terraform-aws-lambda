@@ -16,6 +16,5 @@ output "alias_invoke_arn" {
 
 output "alias_name" {
   description = "Used for API Gateway permission to allow lambda invocations"
-  value = "${module.lambda-label.function_name}:${aws_lambda_alias.alias.name}"
+  value       = "${module.lambda-label.function_name}:${aws_lambda_alias.alias.name}"
 }
-

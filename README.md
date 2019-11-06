@@ -58,6 +58,7 @@ module "dynamodb_table" {
 | subnet\_ids | Subnet ids for VPC | list | `<list>` | no |
 | timeout | Lambda timeout time in seconds | string | `"900"` | no |
 | tags | A map of tags to add to IAM role resources | map(string) | {} | no |
+| warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no
 
 ## Outputs
 

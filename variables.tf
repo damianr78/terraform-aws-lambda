@@ -118,3 +118,9 @@ variable "policy_lambda_vars" {
   default     = {}
   description = "Optional Custom vars map for a policy"
 }
+
+variable "warm_up_available_environments" {
+  type        = list(string)
+  description = "Environments where warm up will be created"
+  default     = ["PROD", "STAGE"]
+}
