@@ -33,7 +33,7 @@ resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
   count         = "${contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0}"
   
-  statement_id  = "AllowExecutionFromCloudWatch"
+  statement_id  = "AllowExecutionFromCloudWatchWarmUp"
   action        = "lambda:InvokeFunction"
   function_name = module.lambda-label.function_name
   qualifier     = module.lambda-label.environment_upper
