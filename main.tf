@@ -35,7 +35,8 @@ resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
   
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = "${module.lambda-label.function_name}:${module.lambda-label.environment_upper}"
+  function_name = module.lambda-label.function_name
+  qualifier     = module.lambda-label.environment_upper
   principal     = "events.amazonaws.com"
   source_arn    = "arn:aws:events:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:rule/${local.rule_name}"
   
