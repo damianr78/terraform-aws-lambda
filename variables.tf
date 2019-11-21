@@ -51,8 +51,8 @@ variable "subnet_ids" {
   default     = []
 }
 
-variable "dynamodb_trigger_table_name" {
-  description = "Table name if the lambda is a dynamodb trigger"
+variable "dynamodb_trigger_table_stream_arn" {
+  description = "Table stream arn if the lambda is a dynamodb trigger"
   default     = ""
 }
 

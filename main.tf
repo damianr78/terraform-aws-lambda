@@ -181,9 +181,9 @@ resource "aws_lambda_permission" "allow_invocation_from_resource" {
 }
 
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
-  count             = var.dynamodb_trigger_table_name != "" ? 1 : 0
+  count             = var.dynamodb_trigger_table_stream_arn != "" ? 1 : 0
   
-  event_source_arn  = data.aws_dynamodb_table.dynamodb_table[0].stream_arn
+  event_source_arn  = var.dynamodb_trigger_table_stream_arn
   function_name     = "${local.arn}:${module.lambda-label.environment_upper}"
   starting_position = var.dynamodb_trigger_starting_position
   
@@ -206,10 +206,4 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
     aws_lambda_function.lambda_with_dlq,
     aws_lambda_function.lambda
   ]
-}
-
-data "aws_dynamodb_table" "dynamodb_table" {
-  count = var.dynamodb_trigger_table_name != "" ? 1 : 0
-  
-  name  = "${module.lambda-label.environment_lower}${title(var.dynamodb_trigger_table_name)}"
 }
