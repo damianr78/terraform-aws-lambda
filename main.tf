@@ -181,7 +181,7 @@ resource "aws_lambda_permission" "allow_invocation_from_resource" {
 }
 
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
-  count             = var.dynamodb_trigger_table_stream_arn != "" ? 1 : 0
+  count             = var.enable_dynamodb_trigger ? 1 : 0
   
   event_source_arn  = var.dynamodb_trigger_table_stream_arn
   function_name     = "${local.arn}:${module.lambda-label.environment_upper}"

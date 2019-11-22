@@ -52,8 +52,13 @@ variable "subnet_ids" {
 }
 
 variable "dynamodb_trigger_table_stream_arn" {
-  description = "Table stream arn if the lambda is a dynamodb trigger"
+  description = "Table stream arn if enable_dynamodb_trigger is true"
   default     = ""
+}
+
+variable "enable_dynamodb_trigger" {
+  description = "Enable dynamodb trigger for lambda"
+  default     = false
 }
 
 variable "dynamodb_trigger_starting_position" {
