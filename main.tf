@@ -58,11 +58,12 @@ resource "aws_cloudwatch_event_target" "lambda_cloudwatch_target" {
 }
 
 module "lambda-label" {
-  source           = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.4"
-  environment      = var.environment
-  artifact_id      = var.artifact_id
-  artifact_version = var.artifact_version
-  tags             = var.tags
+  source               = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.7"
+  environment           = var.environment
+  artifact_id           = var.artifact_id
+  artifact_version      = var.artifact_version
+  prefix_function_name  = var.prefix_function_name
+  tags                  = var.tags
 }
 
 ## S3

@@ -59,6 +59,7 @@ module "dynamodb_table" {
 | timeout | Lambda timeout time in seconds | string | `"900"` | no |
 | tags | A map of tags to add to IAM role resources | map(string) | {} | no |
 | warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no
+| prefix_function_name | Prefix for function name, e.g. 'prefix-create-credit-transaction-aws-lambda' | string | `""` | no |
 
 ## Outputs
 

@@ -32,6 +32,12 @@ variable "artifact_version" {
   description = "Version of the lambdas artifact"
 }
 
+variable "prefix_function_name" {
+  type        = string
+  description = "Prefix for function name, e.g. 'prefix-create-credit-transaction-aws-lambda'"
+  default     = ""
+}
+
 variable "environment_variables" {
   type = map(string)
   default = {
