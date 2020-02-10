@@ -60,6 +60,13 @@ module "dynamodb_table" {
 | tags | A map of tags to add to IAM role resources | map(string) | {} | no |
 | warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no
 | prefix_function_name | Prefix for function name, e.g. 'prefix-create-credit-transaction-aws-lambda' | string | `""` | no |
+| owner | Owner to be used on all the resources as identifier | string | | yes
+| business_unit | Business Unit to be used on all the resources as identifier | string | | yes
+| enable_s3_trigger | Boolean to enable s3 trigger | boolean | false | no
+| s3_trigger_bucket | Bucket name that triggers lambda | string | "" | no
+| s3_trigger_events | List of events that trigger lambda | list | [] | no
+| filter_prefix | Prefix of bucket key | string | "" | no
+| filter_suffix | Suffix of bucket key | string | "" | no
 
 ## Outputs
 

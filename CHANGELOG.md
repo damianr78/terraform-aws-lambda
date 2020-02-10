@@ -1,3 +1,9 @@
+## 2.13
+### Updated
+- Rollback of cloudwatch def
+### Added
+- S3 trigger
+
 ## 2.9
 ### Updated
 - Tag all resources

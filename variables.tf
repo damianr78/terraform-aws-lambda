@@ -143,3 +143,31 @@ variable "warm_up_available_environments" {
   description = "Environments where warm up will be created"
   default     = ["PROD", "STAGE"]
 }
+
+variable "enable_s3_trigger" {
+  description = "Enable s3 trigger for lambda"
+  default     = false
+}
+
+variable "s3_trigger_bucket" {
+  description = "S3 Bucket that triggers lambda"
+  default = ""
+}
+
+variable "s3_trigger_events" {
+  description = "List of events that invoke lambda function"
+  type = list(string)
+  default     = []
+}
+
+variable "s3_trigger_key_prefix" {
+  description = "S3 key prefix"
+  default = ""
+}
+
+variable "s3_trigger_key_suffix" {
+  description = "S3 key suffix"
+  default = ""
+}
+
+

@@ -21,40 +21,36 @@ locals {
     )[0]
 }
 
- module "lambda_cloudwatch_rule" {
-   source = "git@github.com:Bancar/terraform-aws-cloudwatch-rule.git?ref=tags/1.3"
+resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
+  count               = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  name                = local.rule_name
+  description         = "Warm up rule for lambda ${module.lambda-label.function_name}"
+  schedule_expression = "rate(5 minutes)"
+  tags                = merge(map("Name",local.rule_name), {})
+}
 
-   
-   rule_name              = local.rule_name
-   rule_description       = "Warm up rule for lambda ${module.lambda-label.function_name}"
-   schedule_expression    = "rate(5 minutes)"
-   tags                   = map("Name",local.rule_name)
-   owner                  = var.owner
-   business_unit          = var.business_unit
-   environment            = var.environment
-   available_environments = var.warm_up_available_environments
- }
 
- module "lambda_cloudwatch_target" {
-   source = "git@github.com:Bancar/terraform-aws-cloudwatch-target.git?ref=tags/1.2"
-
-   lambda_arn             = local.arn
-   cloudwatch_rule        = module.lambda_cloudwatch_rule.rule_name[0]
-   input                  = "{\"keepAlive\": true}"
-   environment            = module.lambda-label.environment_upper
-   available_environments = var.warm_up_available_environments
- }
+resource "aws_cloudwatch_event_target" "lambda_cloudwatch_target" {
+  count   = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  arn     = "${local.arn}:${module.lambda-label.environment_upper}"
+  rule    = local.rule_name
+  input   = "{\"keepAlive\": true}"
+  depends_on = [
+    aws_cloudwatch_event_rule.lambda_cloudwatch_rule
+  ]
+}
 
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
   count         = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
-  
   statement_id  = "AllowExecutionFromCloudWatchWarmUp"
   action        = "lambda:InvokeFunction"
   function_name = module.lambda-label.function_name
   qualifier     = module.lambda-label.environment_upper
   principal     = "events.amazonaws.com"
-  source_arn    = module.lambda_cloudwatch_rule.rule_arn[0]
-  
+  source_arn    = "arn:aws:events:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:rule/${local.rule_name}"
+  depends_on = [
+    aws_cloudwatch_event_rule.lambda_cloudwatch_rule
+  ]
 }
 
 module "lambda-label" {
@@ -204,6 +200,23 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
   qualifier     = module.lambda-label.environment_upper
 
   depends_on = [
+    aws_lambda_function.lambda_with_dlq,
+    aws_lambda_function.lambda
+  ]
+}
+
+resource "aws_s3_bucket_notification" "s3_trigger" {
+  count             = var.enable_s3_trigger ? 1 : 0
+
+  bucket = var.s3_trigger_bucket
+
+  lambda_function {
+    lambda_function_arn = "${local.arn}:${module.lambda-label.environment_upper}"
+    events              = var.s3_trigger_events
+    filter_prefix       = var.s3_trigger_key_prefix
+    filter_suffix       = var.s3_trigger_key_suffix
+  }
+  depends_on        = [
     aws_lambda_function.lambda_with_dlq,
     aws_lambda_function.lambda
   ]
