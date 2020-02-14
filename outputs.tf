@@ -1,5 +1,5 @@
 output "arn" {
-  value = local.arn
+  value = aws_lambda_function.lambda.arn
 }
 
 output "function_name" {
@@ -7,7 +7,7 @@ output "function_name" {
 }
 
 output "invoke_arn" {
-  value = local.invoke_arn
+  value = aws_lambda_function.lambda.invoke_arn
 }
 
 output "alias_invoke_arn" {

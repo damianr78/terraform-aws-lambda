@@ -124,14 +124,6 @@ variable "tags" {
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)"
 }
 
-variable "owner" {
-  description = "Owner to be used on all the resources as identifier"
-}
-
-variable "business_unit" {
-  description = "Business Unit to be used on all the resources as identifier"
-}
-
 variable "policy_lambda_vars" {
   type        = map(string)
   default     = {}
