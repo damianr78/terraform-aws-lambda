@@ -8,25 +8,6 @@ locals {
   targets_dlq = var.dead_letter_queue_name != "" ? [var.dead_letter_queue_name] : []
 }
 
-resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
-  count               = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
-  name                = local.rule_name
-  description         = "Warm up rule for lambda ${module.lambda-label.function_name}"
-  schedule_expression = "rate(5 minutes)"
-  tags                = merge(map("Name",local.rule_name), {})
-}
-
-
-resource "aws_cloudwatch_event_target" "lambda_cloudwatch_target" {
-  count   = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
-  arn     = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
-  rule    = local.rule_name
-  input   = "{\"keepAlive\": true}"
-  depends_on = [
-    aws_cloudwatch_event_rule.lambda_cloudwatch_rule
-  ]
-}
-
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
   count         = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
   
@@ -145,6 +126,29 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   
   depends_on        = [
     aws_lambda_alias.alias
+  ]
+}
+
+resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
+  count               = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  name                = local.rule_name
+  description         = "Warm up rule for lambda ${module.lambda-label.function_name}"
+  schedule_expression = "rate(5 minutes)"
+  tags                = merge(map("Name",local.rule_name), {})
+
+  depends_on = [
+    aws_lambda_function.lambda
+  ]
+}
+
+
+resource "aws_cloudwatch_event_target" "lambda_cloudwatch_target" {
+  count   = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  arn     = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
+  rule    = local.rule_name
+  input   = "{\"keepAlive\": true}"
+  depends_on = [
+    aws_cloudwatch_event_rule.lambda_cloudwatch_rule
   ]
 }
 

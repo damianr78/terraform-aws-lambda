@@ -10,8 +10,8 @@ This module requires [AWS Provider](https://github.com/terraform-providers/terra
 ## Usage
 
 ```hcl
-module "dynamodb_table" {
-  source               = "git@github.com:Bancar/terraform-aws-lambda.git?ref=tags/1.0"
+module "Lambda" {
+  source               = "git@github.com:Bancar/terraform-aws-lambda.git?ref=tags/2.16"
   artifact_name        = "artifact-name-aws-lambda"
   artifact_version     = "1.0.0-SNAPSHOT"
   function_description = "Description of function name"
