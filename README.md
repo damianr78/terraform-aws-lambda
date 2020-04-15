@@ -67,6 +67,7 @@ module "Lambda" {
 | s3_trigger_events | List of events that trigger lambda | list | [] | no
 | filter_prefix | Prefix of bucket key | string | "" | no
 | filter_suffix | Suffix of bucket key | string | "" | no
+| proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | bool | false | no
 
 ## Outputs
 

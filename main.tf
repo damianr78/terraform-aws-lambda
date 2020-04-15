@@ -1,15 +1,13 @@
 locals {
   bucket_path = "builds/${var.repo_name}/${module.lambda-label.artifact_id}/${module.lambda-label.artifact_version}"
-  
   vpc_policy  = length(var.subnet_ids) > 0 ? ["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] : []
-
   rule_name   = "${module.lambda-label.function_name}-${module.lambda-label.environment_upper}-WARMUP"
-  
   targets_dlq = var.dead_letter_queue_name != "" ? [var.dead_letter_queue_name] : []
+  warm_up_enabled = contains(var.warm_up_available_environments, module.lambda-label.environment_upper)
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
-  count         = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  count         = local.warm_up_enabled ? 1 : 0
   
   statement_id  = "AllowExecutionFromCloudWatchWarmUp"
   action        = "lambda:InvokeFunction"
@@ -85,6 +83,7 @@ resource "aws_lambda_function" "lambda" {
     security_group_ids  = var.security_group_ids
     subnet_ids          = var.subnet_ids
   }
+
   environment {
     variables = var.environment_variables
   }
@@ -130,7 +129,7 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
 }
 
 resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
-  count               = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  count               = local.warm_up_enabled ? 1 : 0
   name                = local.rule_name
   description         = "Warm up rule for lambda ${module.lambda-label.function_name}"
   schedule_expression = "rate(5 minutes)"
@@ -143,11 +142,12 @@ resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
 
 
 resource "aws_cloudwatch_event_target" "lambda_cloudwatch_target" {
-  count   = contains(var.warm_up_available_environments, module.lambda-label.environment_upper) ? 1 : 0
+  count   = local.warm_up_enabled ? 1 : 0
   arn     = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
   rule    = local.rule_name
-  input   = "{\"keepAlive\": true}"
+  input   = var.proxy ? "{\"body\": \"keepAlive\"}" : "{\"keepAlive\": true}"
   depends_on = [
+    aws_lambda_function.lambda,
     aws_cloudwatch_event_rule.lambda_cloudwatch_rule
   ]
 }

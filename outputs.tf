@@ -6,16 +6,16 @@ output "function_name" {
   value = module.lambda-label.function_name
 }
 
-output "invoke_arn" {
-  value = aws_lambda_function.lambda.invoke_arn
-}
-
 output "alias_arn" {
   value = aws_lambda_alias.alias.arn
 }
 
 output "alias_invoke_arn" {
   value = aws_lambda_alias.alias.invoke_arn
+}
+
+output "invoke_arn" {
+  value = aws_lambda_function.lambda.invoke_arn
 }
 
 output "alias_name" {

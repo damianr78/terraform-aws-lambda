@@ -162,4 +162,7 @@ variable "s3_trigger_key_suffix" {
   default = ""
 }
 
-
+variable "proxy" {
+  description = "Boolean to differentiate between normal lambdas and proxy and send a different warm-up event"
+  default = false
+}
