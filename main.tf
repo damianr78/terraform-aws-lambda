@@ -43,7 +43,7 @@ module "lambda_role" {
   account_id          = data.aws_caller_identity.current_caller.account_id
   assume_role_index   = "LAMBDA"
   role_name           = "${module.lambda-label.function_name}Role-${module.lambda-label.environment_lower}"
-  custom_policies     = [var.lambda_policy_path]
+  custom_policies     = var.lambda_policy_path != "" ? [var.lambda_policy_path] : []
   policy_custom_vars  = var.policy_lambda_vars
   tags                = var.tags
 

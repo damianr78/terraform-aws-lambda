@@ -20,6 +20,7 @@ variable "function_description" {
 
 variable "lambda_policy_path" {
   description = "Policy's tpl path for the lambda"
+  default     = ""
 }
 
 variable "function_handler" {
