@@ -1,9 +1,10 @@
 locals {
-  bucket_path = "builds/${var.repo_name}/${module.lambda-label.artifact_id}/${module.lambda-label.artifact_version}"
-  vpc_policy  = length(var.subnet_ids) > 0 ? ["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] : []
-  rule_name   = "${module.lambda-label.function_name}-${module.lambda-label.environment_upper}-WARMUP"
-  targets_dlq = var.dead_letter_queue_name != "" ? [var.dead_letter_queue_name] : []
-  warm_up_enabled = contains(var.warm_up_available_environments, module.lambda-label.environment_upper)
+  bucket_path         = "builds/${var.repo_name}/${module.lambda-label.artifact_id}/${module.lambda-label.artifact_version}"
+  vpc_policy          = length(var.subnet_ids) > 0 ? ["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] : []
+  assume_role_policy  = var.attach_assume_role_policy ? ["arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/iam_p_assume_role"] : []
+  rule_name           = "${module.lambda-label.function_name}-${module.lambda-label.environment_upper}-WARMUP"
+  targets_dlq         = var.dead_letter_queue_name != "" ? [var.dead_letter_queue_name] : []
+  warm_up_enabled     = contains(var.warm_up_available_environments, module.lambda-label.environment_upper)
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
@@ -48,6 +49,7 @@ module "lambda_role" {
 
   policies_arn = concat(
     local.vpc_policy,
+    local.assume_role_policy,
     [coalesce(var.base_policy_arn, "arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/iam_p_lambda_configs")]
   )
 }

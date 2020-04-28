@@ -166,3 +166,8 @@ variable "proxy" {
   description = "Boolean to differentiate between normal lambdas and proxy and send a different warm-up event"
   default = false
 }
+
+variable "attach_assume_role_policy" {
+  description = "Boolean to indicate if the iam_p_assume_role shoud be attached to the role"
+  default = false
+}
