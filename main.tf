@@ -184,3 +184,14 @@ resource "aws_s3_bucket_notification" "s3_trigger" {
     aws_lambda_function.lambda
   ]
 }
+
+resource "aws_lambda_permission" "allow_bucket" {
+  count         = var.enable_s3_trigger ? 1 : 0
+
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda.function_name
+  principal     = "s3.amazonaws.com"
+  source_arn    = var.s3_trigger_bucket_arn
+  qualifier     = module.lambda-label.environment_upper
+}

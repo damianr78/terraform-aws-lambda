@@ -64,6 +64,7 @@ module "Lambda" {
 | business_unit | Business Unit to be used on all the resources as identifier | string | | yes
 | enable_s3_trigger | Boolean to enable s3 trigger | boolean | false | no
 | s3_trigger_bucket | Bucket name that triggers lambda | string | "" | no
+| s3_trigger_bucket_arn | ARN of the bucket that triggers lambda | string | "" | no
 | s3_trigger_events | List of events that trigger lambda | list | [] | no
 | filter_prefix | Prefix of bucket key | string | "" | no
 | filter_suffix | Suffix of bucket key | string | "" | no

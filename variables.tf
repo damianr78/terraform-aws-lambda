@@ -144,6 +144,13 @@ variable "enable_s3_trigger" {
 
 variable "s3_trigger_bucket" {
   description = "S3 Bucket that triggers lambda"
+  type = string
+  default = ""
+}
+
+variable "s3_trigger_bucket_arn" {
+  description = "S3 Bucket ARN that triggers lambda"
+  type = string
   default = ""
 }
 
