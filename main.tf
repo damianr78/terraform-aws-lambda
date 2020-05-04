@@ -130,6 +130,18 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   ]
 }
 
+resource "aws_lambda_event_source_mapping" "sqs_trigger" {
+  count                     = var.enable_sqs_trigger ? 1 : 0
+
+  batch_size                = var.sqs_trigger_batch_size
+  event_source_arn          = var.sqs_trigger_queue_arn
+  function_name             = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
+
+  depends_on                = [
+    aws_lambda_alias.alias
+  ]
+}
+
 resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
   count               = local.warm_up_enabled ? 1 : 0
   name                = local.rule_name

@@ -179,3 +179,18 @@ variable "attach_assume_role_policy" {
   description = "Boolean to indicate if the iam_p_assume_role shoud be attached to the role"
   default = false
 }
+
+variable "enable_sqs_trigger" {
+  description = "Enable sqs trigger for lambda"
+  default     = false
+}
+
+variable "sqs_trigger_queue_arn" {
+  description = "SQS arn if enable_sqs_trigger is true"
+  default     = ""
+}
+
+variable "sqs_trigger_batch_size" {
+  description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation."
+  default = 1
+}
