@@ -9,7 +9,7 @@ locals {
 
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
   count         = local.warm_up_enabled ? 1 : 0
-  
+
   statement_id  = "AllowExecutionFromCloudWatchWarmUp"
   action        = "lambda:InvokeFunction"
   function_name = module.lambda-label.function_name
@@ -35,7 +35,7 @@ data "aws_s3_bucket_object" "hash" {
   bucket = var.product_bucket
   key    = "${local.bucket_path}/${module.lambda-label.artifact_id}.hash"
 }
-  
+
 ## Permissions
 module "lambda_role" {
   source              = "git@github.com:Bancar/terraform-aws-iam-roles.git?ref=tags/1.9"
@@ -60,7 +60,7 @@ resource "aws_lambda_alias" "alias" {
   function_name     = aws_lambda_function.lambda.arn
   function_version  = aws_lambda_function.lambda.version
   description       = "${module.lambda-label.environment_upper} VERSION ${module.lambda-label.artifact_version} - ${trimspace(replace(timestamp(), "/[A-Z]/", " "))}"
-  
+
   lifecycle {
     ignore_changes = [description]
   }
@@ -78,9 +78,10 @@ resource "aws_lambda_function" "lambda" {
   timeout           = var.timeout
   memory_size       = var.memory_size
   publish           = true
+  reserved_concurrent_executions = var.reserved_concurrent_executions
   source_code_hash  = replace(data.aws_s3_bucket_object.hash.body, "/\n$/", "")
   tags              = module.lambda-label.tags
-  
+
   vpc_config {
     security_group_ids  = var.security_group_ids
     subnet_ids          = var.subnet_ids
@@ -105,7 +106,7 @@ resource "aws_lambda_function" "lambda" {
 
 resource "aws_lambda_permission" "allow_invocation_from_resource" {
   count           = length(var.permissions_to_invoke)
-  
+
   statement_id    = var.permissions_to_invoke[count.index].statement_id
   action          = "lambda:InvokeFunction"
   function_name   = module.lambda-label.function_name
@@ -120,11 +121,11 @@ resource "aws_lambda_permission" "allow_invocation_from_resource" {
 
 resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   count             = var.enable_dynamodb_trigger ? 1 : 0
-  
+
   event_source_arn  = var.dynamodb_trigger_table_stream_arn
   function_name     = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
   starting_position = var.dynamodb_trigger_starting_position
-  
+
   depends_on        = [
     aws_lambda_alias.alias
   ]
@@ -168,7 +169,7 @@ resource "aws_cloudwatch_event_target" "lambda_cloudwatch_target" {
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
   count         = var.rule_arn == "" ? 0 : 1
-  
+
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.lambda-label.function_name

@@ -58,17 +58,18 @@ module "Lambda" {
 | subnet\_ids | Subnet ids for VPC | list | `<list>` | no |
 | timeout | Lambda timeout time in seconds | string | `"900"` | no |
 | tags | A map of tags to add to IAM role resources | map(string) | {} | no |
-| warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no
+| warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no |
 | prefix_function_name | Prefix for function name, e.g. 'prefix-create-credit-transaction-aws-lambda' | string | `""` | no |
-| owner | Owner to be used on all the resources as identifier | string | | yes
-| business_unit | Business Unit to be used on all the resources as identifier | string | | yes
-| enable_s3_trigger | Boolean to enable s3 trigger | boolean | false | no
-| s3_trigger_bucket | Bucket name that triggers lambda | string | "" | no
-| s3_trigger_bucket_arn | ARN of the bucket that triggers lambda | string | "" | no
-| s3_trigger_events | List of events that trigger lambda | list | [] | no
-| filter_prefix | Prefix of bucket key | string | "" | no
-| filter_suffix | Suffix of bucket key | string | "" | no
-| proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | bool | false | no
+| owner | Owner to be used on all the resources as identifier | string | | yes |
+| business_unit | Business Unit to be used on all the resources as identifier | string | | yes |
+| enable_s3_trigger | Boolean to enable s3 trigger | boolean | false | no |
+| s3_trigger_bucket | Bucket name that triggers lambda | string | "" | no |
+| s3_trigger_bucket_arn | ARN of the bucket that triggers lambda | string | "" | no |
+| s3_trigger_events | List of events that trigger lambda | list | [] | no |
+| reserved_concurrent_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1 | -1 | no |
+| filter_prefix | Prefix of bucket key | string | "" | no |
+| filter_suffix | Suffix of bucket key | string | "" | no |
+| proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | bool | false | no |
 
 ## Outputs
 

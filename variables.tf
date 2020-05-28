@@ -194,3 +194,8 @@ variable "sqs_trigger_batch_size" {
   description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation."
   default = 1
 }
+
+variable "reserved_concurrent_executions" {
+  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1"
+  default     = -1
+}
