@@ -49,13 +49,11 @@ variable "environment_variables" {
 variable "security_group_ids" {
   type        = list(string)
   description = "Security groups ids for VPC"
-  default     = []
 }
 
 variable "subnet_ids" {
   type        = list(string)
   description = "Subnet ids for VPC"
-  default     = []
 }
 
 variable "dynamodb_trigger_table_stream_arn" {

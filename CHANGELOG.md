@@ -1,3 +1,7 @@
+## 2.22
+### Updated
+- Required Security Group Ids and Subnet Ids
+
 ## 2.14
 ### Updated
 - Refactor DLQ

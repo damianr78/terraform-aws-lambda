@@ -4,7 +4,6 @@ Terraform module to provision a Lambda function.
 
 This module requires [AWS Provider](https://github.com/terraform-providers/terraform-provider-aws) `>= 1.17.0`
 
-
 ---
 
 ## Usage
@@ -54,8 +53,8 @@ module "Lambda" {
 | permission\_source\_arn | Source ARN for permission | string | `""` | no |
 | permission\_statement\_id | Statement id for lambda execution permission | string | `""` | no |
 | runtime | Runtime language for lambda | string | `"java8"` | no |
-| security\_group\_ids | Security groups ids for VPC | list | `<list>` | no |
-| subnet\_ids | Subnet ids for VPC | list | `<list>` | no |
+| security\_group\_ids | Security groups ids for VPC | list | `n/a` | yes |
+| subnet\_ids | Subnet ids for VPC | list | `n/a` | yes |
 | timeout | Lambda timeout time in seconds | string | `"900"` | no |
 | tags | A map of tags to add to IAM role resources | map(string) | {} | no |
 | warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no |
@@ -66,7 +65,7 @@ module "Lambda" {
 | s3_trigger_bucket | Bucket name that triggers lambda | string | "" | no |
 | s3_trigger_bucket_arn | ARN of the bucket that triggers lambda | string | "" | no |
 | s3_trigger_events | List of events that trigger lambda | list | [] | no |
-| reserved_concurrent_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1 | -1 | no |
+| reserved_concurrent_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1 | -1 | no ||
 | filter_prefix | Prefix of bucket key | string | "" | no |
 | filter_suffix | Suffix of bucket key | string | "" | no |
 | proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | bool | false | no |
