@@ -81,6 +81,7 @@ resource "aws_lambda_function" "lambda" {
   reserved_concurrent_executions = var.reserved_concurrent_executions
   source_code_hash  = replace(data.aws_s3_bucket_object.hash.body, "/\n$/", "")
   tags              = module.lambda-label.tags
+  layers            = var.layers
 
   vpc_config {
     security_group_ids  = var.security_group_ids

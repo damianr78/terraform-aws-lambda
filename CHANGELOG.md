@@ -1,3 +1,7 @@
+## 2.23
+### Updated
+- Add Input Lambda Layer 
+
 ## 2.22
 ### Updated
 - Required Security Group Ids and Subnet Ids
