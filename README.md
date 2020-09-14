@@ -43,6 +43,7 @@ module "Lambda" {
 | dead\_letter\_queue\_resource | Dead letter queue resource. Only sqs and sns are allowed | string | `"sqs"` | no |
 | dynamodb\_trigger\_starting\_position | Starting position for dynamodb trigger | string | `"LATEST"` | no |
 | dynamodb\_trigger\_table\_name | Table name if the lambda is a dynamodb trigger | string | `""` | no |
+| dynamodb_trigger_batch_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation | string | `"100"` | no |
 | environment | Environment name to use on all resources created (API-Gateway, Lambdas, etc.) | string | n/a | yes |
 | environment\_variables |  | map | `<map>` | no |
 | function\_description | Description of the lambda function | string | n/a | yes |
@@ -53,8 +54,8 @@ module "Lambda" {
 | permission\_source\_arn | Source ARN for permission | string | `""` | no |
 | permission\_statement\_id | Statement id for lambda execution permission | string | `""` | no |
 | runtime | Runtime language for lambda | string | `"java8"` | no |
-| security\_group\_ids | Security groups ids for VPC | list | `n/a` | yes |
-| subnet\_ids | Subnet ids for VPC | list | `n/a` | yes |
+| security\_group\_ids | Security groups ids for VPC | list | `[]` | no |
+| subnet\_ids | Subnet ids for VPC | list | `[]` | no |
 | timeout | Lambda timeout time in seconds | string | `"900"` | no |
 | tags | A map of tags to add to IAM role resources | map(string) | {} | no |
 | warm_up_available_environments | Environments where warm up will be created | list(string) | ["PROD", "STAGE"] | no |

@@ -1,0 +1,38 @@
+on: 
+  pull_request:
+    branches:
+      - master
+jobs:
+  terraform:
+    name: Terraform modules check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Repository Checkout 
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Terraform Setup
+      id: setup
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform FMT
+      id: fmt
+      run: terraform fmt -check -recursive -diff
+
+    - name: Terraform Security Scan
+      id: tfsec
+      uses: triat/terraform-security-scan@v2.0.1
+
+    - name: Terraform Lint
+      id: tflint
+      uses: rickardl/tflint-action@v1.5
+
+    - name: Terraform docs to USAGE.md
+      id: docs
+      uses: Dirrk/terraform-docs@v1.0.8
+      with:
+        tf_docs_working_dir: .
+        tf_docs_output_file: USAGE.md
+        tf_docs_output_method: inject
+        tf_docs_git_push: 'true' 

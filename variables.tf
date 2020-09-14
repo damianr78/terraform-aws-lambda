@@ -46,14 +46,28 @@ variable "environment_variables" {
   }
 }
 
-variable "security_group_ids" {
-  type        = list(string)
-  description = "Security groups ids for VPC"
-}
+# variable "security_group_ids" {
+#   type        = list(string)
+#   description = "Security groups ids for VPC"
+#   default     = []
+# }
+
+# variable "subnet_ids" {
+#   type        = list(string)
+#   description = "Subnet ids for VPC"
+#   default     = []
+# }
 
 variable "subnet_ids" {
+  description = "List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets."
   type        = list(string)
-  description = "Subnet ids for VPC"
+  default     = []
+}
+
+variable "security_group_ids" {
+  description = "List of security group ids when Lambda Function should run in the VPC."
+  type        = list(string)
+  default     = []
 }
 
 variable "dynamodb_trigger_table_stream_arn" {
@@ -71,9 +85,14 @@ variable "dynamodb_trigger_starting_position" {
   default     = "LATEST"
 }
 
+variable "dynamodb_trigger_batch_size" {
+  description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation"
+  default     = "100"
+}
+
 variable "permissions_to_invoke" {
   description = "List of objects describing permisions to invoke lambda (for principal resource: only sns, apigateway, s3 or cloudwatch are allowed) source_arn is the arn of the resource invoking the lambda"
-  type = list(object({statement_id: string, principal_resource: string, source_arn: string}))
+  type        = list(object({ statement_id : string, principal_resource : string, source_arn : string }))
   default     = []
 }
 
@@ -142,40 +161,40 @@ variable "enable_s3_trigger" {
 
 variable "s3_trigger_bucket" {
   description = "S3 Bucket that triggers lambda"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "s3_trigger_bucket_arn" {
   description = "S3 Bucket ARN that triggers lambda"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "s3_trigger_events" {
   description = "List of events that invoke lambda function"
-  type = list(string)
+  type        = list(string)
   default     = []
 }
 
 variable "s3_trigger_key_prefix" {
   description = "S3 key prefix"
-  default = ""
+  default     = ""
 }
 
 variable "s3_trigger_key_suffix" {
   description = "S3 key suffix"
-  default = ""
+  default     = ""
 }
 
 variable "proxy" {
   description = "Boolean to differentiate between normal lambdas and proxy and send a different warm-up event"
-  default = false
+  default     = false
 }
 
 variable "attach_assume_role_policy" {
   description = "Boolean to indicate if the iam_p_assume_role shoud be attached to the role"
-  default = false
+  default     = false
 }
 
 variable "enable_sqs_trigger" {
@@ -190,7 +209,7 @@ variable "sqs_trigger_queue_arn" {
 
 variable "sqs_trigger_batch_size" {
   description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation."
-  default = 1
+  default     = 1
 }
 
 variable "reserved_concurrent_executions" {

@@ -1,3 +1,8 @@
+## 2.24
+### Updated
+- Add Input dynamodb_trigger_batch_size
+- Security Group Ids and Subnet Ids are optionals
+
 ## 2.23
 ### Updated
 - Add Input Lambda Layer 
