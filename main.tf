@@ -54,17 +54,21 @@ module "lambda_role" {
   )
 }
 
+resource "time_offset" "alias_version_update" {
+  triggers = {
+    # Save the time each switch of Lambda Version
+    lambda_version = aws_lambda_function.lambda.version
+  }
+
+  offset_hours = -3
+}
+
 ## Lambda
 resource "aws_lambda_alias" "alias" {
   name             = module.lambda-label.environment_upper
   function_name    = aws_lambda_function.lambda.arn
   function_version = aws_lambda_function.lambda.version
-  description      = "${module.lambda-label.environment_upper} VERSION ${module.lambda-label.artifact_version} - ${trimspace(replace(timestamp(), "/[A-Z]/", " "))}"
-
-  lifecycle {
-    ignore_changes = [description]
-  }
-
+  description      = "${module.lambda-label.environment_upper} VERSION ${module.lambda-label.artifact_version} - ${formatdate("DD-MM-YYYY hh:mm:ss", time_offset.alias_version_update.rfc3339)}"
 }
 
 resource "aws_lambda_function" "lambda" {

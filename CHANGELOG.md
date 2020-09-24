@@ -1,3 +1,7 @@
+## 2.25
+### Updated
+- Fix Timestamp in Alias Description
+
 ## 2.24
 ### Updated
 - Add Input dynamodb_trigger_batch_size

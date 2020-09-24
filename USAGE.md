@@ -11,6 +11,7 @@
 | Name | Version |
 |------|---------|
 | aws | n/a |
+| time | n/a |
 
 ## Inputs
 
