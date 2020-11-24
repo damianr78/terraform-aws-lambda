@@ -116,6 +116,11 @@ variable "dead_letter_queue_name" {
   default     = ""
 }
 
+variable "function_name" {
+  description = "Lambda name. If empty, module uses lambda-label function name"
+  default     = ""
+}
+
 variable "dead_letter_queue_resource" {
   description = "Dead letter queue resource. Only sqs and sns are allowed"
   default     = "sqs"

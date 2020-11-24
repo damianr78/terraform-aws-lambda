@@ -2,9 +2,10 @@ locals {
   bucket_path        = "builds/${var.repo_name}/${module.lambda-label.artifact_id}/${module.lambda-label.artifact_version}"
   vpc_policy         = length(var.subnet_ids) > 0 ? ["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] : []
   assume_role_policy = var.attach_assume_role_policy ? ["arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:policy/iam_p_assume_role"] : []
-  rule_name          = "${module.lambda-label.function_name}-${module.lambda-label.environment_upper}-WARMUP"
+  rule_name          = "${local.function_name}-${module.lambda-label.environment_upper}-WARMUP"
   targets_dlq        = var.dead_letter_queue_name != "" ? [var.dead_letter_queue_name] : []
   warm_up_enabled    = contains(var.warm_up_available_environments, module.lambda-label.environment_upper)
+  function_name      = var.function_name != "" ? var.function_name : module.lambda-label.function_name
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
@@ -12,7 +13,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
 
   statement_id  = "AllowExecutionFromCloudWatchWarmUp"
   action        = "lambda:InvokeFunction"
-  function_name = module.lambda-label.function_name
+  function_name = local.function_name
   qualifier     = module.lambda-label.environment_upper
   principal     = "events.amazonaws.com"
   source_arn    = "arn:aws:events:${data.aws_region.current_region.name}:${data.aws_caller_identity.current_caller.account_id}:rule/${local.rule_name}"
@@ -42,7 +43,7 @@ module "lambda_role" {
   environment        = module.lambda-label.environment_lower
   account_id         = data.aws_caller_identity.current_caller.account_id
   assume_role_index  = "LAMBDA"
-  role_name          = "${module.lambda-label.function_name}Role-${module.lambda-label.environment_lower}"
+  role_name          = "${local.function_name}Role-${module.lambda-label.environment_lower}"
   custom_policies    = var.lambda_policy_path != "" ? [var.lambda_policy_path] : []
   policy_custom_vars = var.policy_lambda_vars
   tags               = var.tags
@@ -72,7 +73,7 @@ resource "aws_lambda_alias" "alias" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  function_name                  = module.lambda-label.function_name
+  function_name                  = local.function_name
   description                    = var.function_description
   s3_bucket                      = var.product_bucket
   s3_key                         = "${local.bucket_path}/${module.lambda-label.artifact_id}.zip"
@@ -117,7 +118,7 @@ resource "aws_lambda_permission" "allow_invocation_from_resource" {
 
   statement_id  = var.permissions_to_invoke[count.index].statement_id
   action        = "lambda:InvokeFunction"
-  function_name = module.lambda-label.function_name
+  function_name = local.function_name
   principal     = "${var.permissions_to_invoke[count.index].principal_resource}.amazonaws.com"
   source_arn    = var.permissions_to_invoke[count.index].source_arn
   qualifier     = module.lambda-label.environment_upper
@@ -155,7 +156,7 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
 resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
   count               = local.warm_up_enabled ? 1 : 0
   name                = local.rule_name
-  description         = "Warm up rule for lambda ${module.lambda-label.function_name}"
+  description         = "Warm up rule for lambda ${local.function_name}"
   schedule_expression = "rate(5 minutes)"
   tags                = merge(map("Name", local.rule_name), {})
 
@@ -181,7 +182,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda" {
 
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = module.lambda-label.function_name
+  function_name = local.function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.rule_arn
   qualifier     = module.lambda-label.environment_upper

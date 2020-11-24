@@ -33,6 +33,7 @@
 | environment\_variables | n/a | `map(string)` | <pre>{<br>  "default": "default_variable"<br>}</pre> | no |
 | function\_description | Description of the lambda function | `any` | n/a | yes |
 | function\_handler | Handler for lambda function | `string` | `"com.bancar.services.MainHandler"` | no |
+| function\_name | Lambda name. If empty, module uses lambda-label function name | `string` | `""` | no |
 | lambda\_policy\_path | Policy's tpl path for the lambda | `string` | `""` | no |
 | layers | List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function | `list(string)` | `null` | no |
 | memory\_size | Lambda's size | `string` | `"512"` | no |
