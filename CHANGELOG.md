@@ -1,3 +1,7 @@
+## 2.26
+### Added
+- Custom function_name
+
 ## 2.25
 ### Updated
 - Fix Timestamp in Alias Description
