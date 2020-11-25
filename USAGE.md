@@ -26,6 +26,8 @@
 | dynamodb\_trigger\_batch\_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation | `string` | `"100"` | no |
 | dynamodb\_trigger\_starting\_position | Starting position for dynamodb trigger | `string` | `"LATEST"` | no |
 | dynamodb\_trigger\_table\_stream\_arn | Table stream arn if enable\_dynamodb\_trigger is true | `string` | `""` | no |
+| efs\_arn | EFS ARN file system | `string` | `""` | no |
+| efs\_local\_mount\_path | EFS path file system | `string` | `""` | no |
 | enable\_dynamodb\_trigger | Enable dynamodb trigger for lambda | `bool` | `false` | no |
 | enable\_s3\_trigger | Enable s3 trigger for lambda | `bool` | `false` | no |
 | enable\_sqs\_trigger | Enable sqs trigger for lambda | `bool` | `false` | no |

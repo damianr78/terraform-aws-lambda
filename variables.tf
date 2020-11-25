@@ -227,3 +227,15 @@ variable "layers" {
   description = "List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function"
   type        = list(string)
 }
+
+variable "efs_arn" {
+  type        = string
+  default     = ""
+  description = "EFS ARN file system"
+}
+
+variable "efs_local_mount_path" {
+  type        = string
+  default     = ""
+  description = "EFS path file system"
+}

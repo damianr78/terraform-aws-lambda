@@ -108,6 +108,14 @@ resource "aws_lambda_function" "lambda" {
     }
   }
 
+  dynamic "file_system_config" {
+    for_each = length(var.efs_arn) > 0 ? [true] : []
+    content {
+      arn              = var.efs_arn
+      local_mount_path = var.efs_local_mount_path
+    }
+  }
+
   depends_on = [
     module.lambda_role
   ]
