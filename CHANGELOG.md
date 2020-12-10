@@ -1,3 +1,7 @@
+## 2.28
+### Added
+- Custom function_name is considered in output
+
 ## 2.26
 ### Added
 - Custom function_name
