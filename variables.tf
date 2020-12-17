@@ -211,6 +211,10 @@ variable "sqs_trigger_queue_arn" {
   description = "SQS arn if enable_sqs_trigger is true"
   default     = ""
 }
+variable "sqs_max_window_in_seconds" {
+  description = "The maximum amount of time to gather records before invoking the function"
+  default = 0
+}
 
 variable "sqs_trigger_batch_size" {
   description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation."

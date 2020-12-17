@@ -71,6 +71,7 @@ module "Lambda" {
 | filter_suffix | Suffix of bucket key | string | "" | no |
 | proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | bool | false | no |
 | layers | List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function | list(string) | null | no |
+| sqs_max_window_in_seconds | The maximum amount of time to gather records before invoking the function | integer | 0 | no |
 
 ## Outputs
 

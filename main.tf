@@ -154,6 +154,7 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
 
   batch_size       = var.sqs_trigger_batch_size
   event_source_arn = var.sqs_trigger_queue_arn
+  maximum_batching_window_in_seconds = var.sqs_max_window_in_seconds
   function_name    = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
 
   depends_on = [
