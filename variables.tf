@@ -249,3 +249,9 @@ variable "table_name_triggers" {
   default     = {}
   type        = map(string)
 }
+
+variable dynamodb_backup_function_name{
+  description = "Name of the function name to backup dynamodb to json in s3"
+  type = string
+  default = "DynamoEventToJson"
+}
