@@ -1,13 +1,6 @@
 
-locals {
-  dynamodb_event_sources = [for k, v in var.event_source_mappings : lookup(v, "event_source_arn", null)
-  if length(regexall(".*:dynamodb:.*", lookup(v, "event_source_arn", null))) > 0]kinesis_event_sources  =
-  [for k, v in var.event_source_mappings : lookup(v, "event_source_arn", null) if length(regexall(".*:kinesis:.*",
-  lookup(v, "event_source_arn", null))) > 0]
-}
-
 resource "aws_lambda_event_source_mapping" "event_source" {
-  for_each = var.event_source_mappings
+  for_each = var.table_name_triggers
 
   batch_size                         = lookup(each.value, "batch_size", null)
   bisect_batch_on_function_error     = lookup(each.value, "bisect_batch_on_function_error", null)
