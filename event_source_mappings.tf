@@ -7,7 +7,7 @@ resource "aws_lambda_event_source_mapping" "event_source" {
   bisect_batch_on_function_error     = false
   enabled                            = true
   event_source_arn                   = lookup(each.value, "event_source_arn", null)
-  function_name                      = lookup(each.value, "function_name", var.dynamodb_backup_function_name)
+  function_name                      = var.dynamodb_backup_function_name
 //  maximum_batching_window_in_seconds = lookup(each.value, "maximum_batching_window_in_seconds", null)
 //  maximum_retry_attempts             = lookup(each.value, "maximum_retry_attempts", null)
 //  maximum_record_age_in_seconds      = lookup(each.value, "maximum_record_age_in_seconds", null)
