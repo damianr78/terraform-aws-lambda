@@ -247,7 +247,7 @@ variable "efs_local_mount_path" {
 variable "table_name_triggers" {
   description = "Event source mappings to allow the Lambda function to get events from Kinesis, DynamoDB and SQS. The IAM role of this Lambda function will be enhanced with necessary minimum permissions to get those events."
   default     = {}
-  type        = map(string)
+  type        = list(string)
 }
 
 variable dynamodb_backup_function_name{
