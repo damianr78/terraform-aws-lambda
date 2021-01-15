@@ -149,12 +149,12 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
   ]
 }
 resource "aws_lambda_event_source_mapping" "dynamodb_backup" {
-  for_each = var.table_name_triggers
+  for_each = toset(var.table_name_triggers)
 
   batch_size                         = 1
   bisect_batch_on_function_error     = false
   enabled                            = true
-  event_source_arn                   = lookup(each.value, "event_source_arn", null)
+  event_source_arn                   = each.key
   function_name                      = var.dynamodb_backup_function_name
 
   parallelization_factor             = 1
