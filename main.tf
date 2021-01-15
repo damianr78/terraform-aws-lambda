@@ -156,11 +156,9 @@ resource "aws_lambda_event_source_mapping" "dynamodb_backup" {
   enabled                            = true
   event_source_arn                   = lookup(each.value, "event_source_arn", null)
   function_name                      = var.dynamodb_backup_function_name
-  maximum_retry_attempts             = -1
-  maximum_record_age_in_seconds      = -1
+
   parallelization_factor             = 1
   starting_position                  = "LATEST"
-  starting_position_timestamp        = "LATEST"
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
