@@ -148,6 +148,20 @@ resource "aws_lambda_event_source_mapping" "dynamodb_trigger" {
     aws_lambda_alias.alias
   ]
 }
+resource "aws_lambda_event_source_mapping" "dynamodb_backup" {
+  for_each = var.table_name_triggers
+
+  batch_size                         = 1
+  bisect_batch_on_function_error     = false
+  enabled                            = true
+  event_source_arn                   = lookup(each.value, "event_source_arn", null)
+  function_name                      = var.dynamodb_backup_function_name
+  maximum_retry_attempts             = -1
+  maximum_record_age_in_seconds      = -1
+  parallelization_factor             = 1
+  starting_position                  = "LATEST"
+  starting_position_timestamp        = "LATEST"
+}
 
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   count = var.enable_sqs_trigger ? 1 : 0
