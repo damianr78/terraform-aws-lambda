@@ -156,7 +156,7 @@ resource "aws_lambda_event_source_mapping" "dynamodb_triggers" {
   bisect_batch_on_function_error     = lookup(each.value, "bisect_batch_on_function_error", null)
   enabled                            = lookup(each.value, "enabled", null)
   event_source_arn                   = lookup(each.value, "event_source_arn", null)
-  function_name                      = local.function_name
+  function_name                      = lookup(each.value, "function_name", null)
   parallelization_factor             = lookup(each.value, "parallelization_factor", null)
   starting_position                  = lookup(each.value, "starting_position", null)
 }
