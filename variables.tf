@@ -244,13 +244,8 @@ variable "efs_local_mount_path" {
   description = "EFS path file system"
 }
 
-variable "table_name_triggers" {
+variable "dynamodb_event_source_mappings" {
   description = "Event source mappings to allow the Lambda function to get events from Kinesis, DynamoDB and SQS. The IAM role of this Lambda function will be enhanced with necessary minimum permissions to get those events."
-  type        = set(string)
+  type        = map(any)
 }
 
-variable dynamodb_backup_function_name{
-  description = "Name of the function name to backup dynamodb to json in s3"
-  type = string
-  default = "DynamoEventToJson"
-}
