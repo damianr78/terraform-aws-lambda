@@ -213,7 +213,7 @@ variable "sqs_trigger_queue_arn" {
 }
 variable "sqs_max_window_in_seconds" {
   description = "The maximum amount of time to gather records before invoking the function"
-  default = 0
+  default     = 0
 }
 
 variable "sqs_trigger_batch_size" {
