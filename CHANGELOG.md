@@ -1,3 +1,7 @@
+## 2.29
+### Added
+- Added routing_config and variable additional_version_weights
+
 ## 2.28
 ### Added
 - Custom function_name is considered in output

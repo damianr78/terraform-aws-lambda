@@ -70,6 +70,10 @@ resource "aws_lambda_alias" "alias" {
   function_name    = aws_lambda_function.lambda.arn
   function_version = aws_lambda_function.lambda.version
   description      = "${module.lambda-label.environment_upper} VERSION ${module.lambda-label.artifact_version} - ${formatdate("DD-MM-YYYY hh:mm:ss", time_offset.alias_version_update.rfc3339)}"
+
+  routing_config {
+    additional_version_weights = var.additional_version_weights
+  }
 }
 
 resource "aws_lambda_function" "lambda" {

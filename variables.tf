@@ -243,3 +243,8 @@ variable "efs_local_mount_path" {
   default     = ""
   description = "EFS path file system"
 }
+
+variable "additional_version_weights" {
+  default     = {}
+  description = "Value to distribute the usability percentage (ej: 'version'=percentage '10'=0.5)"
+}
