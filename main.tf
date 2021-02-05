@@ -70,6 +70,10 @@ resource "aws_lambda_alias" "alias" {
   function_name    = aws_lambda_function.lambda.arn
   function_version = aws_lambda_function.lambda.version
   description      = "${module.lambda-label.environment_upper} VERSION ${module.lambda-label.artifact_version} - ${formatdate("DD-MM-YYYY hh:mm:ss", time_offset.alias_version_update.rfc3339)}"
+
+  routing_config {
+    additional_version_weights = var.additional_version_weights
+  }
 }
 
 resource "aws_lambda_function" "lambda" {
@@ -164,10 +168,10 @@ resource "aws_lambda_event_source_mapping" "dynamodb_triggers" {
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   count = var.enable_sqs_trigger ? 1 : 0
 
-  batch_size       = var.sqs_trigger_batch_size
-  event_source_arn = var.sqs_trigger_queue_arn
+  batch_size                         = var.sqs_trigger_batch_size
+  event_source_arn                   = var.sqs_trigger_queue_arn
   maximum_batching_window_in_seconds = var.sqs_max_window_in_seconds
-  function_name    = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
+  function_name                      = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
 
   depends_on = [
     aws_lambda_alias.alias

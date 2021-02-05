@@ -54,6 +54,7 @@
 | s3\_trigger\_key\_prefix | S3 key prefix | `string` | `""` | no |
 | s3\_trigger\_key\_suffix | S3 key suffix | `string` | `""` | no |
 | security\_group\_ids | List of security group ids when Lambda Function should run in the VPC. | `list(string)` | `[]` | no |
+| sqs\_max\_window\_in\_seconds | The maximum amount of time to gather records before invoking the function | `number` | `0` | no |
 | sqs\_trigger\_batch\_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation. | `number` | `1` | no |
 | sqs\_trigger\_queue\_arn | SQS arn if enable\_sqs\_trigger is true | `string` | `""` | no |
 | subnet\_ids | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | `list(string)` | `[]` | no |

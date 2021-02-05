@@ -213,7 +213,7 @@ variable "sqs_trigger_queue_arn" {
 }
 variable "sqs_max_window_in_seconds" {
   description = "The maximum amount of time to gather records before invoking the function"
-  default = 0
+  default     = 0
 }
 
 variable "sqs_trigger_batch_size" {
@@ -244,8 +244,13 @@ variable "efs_local_mount_path" {
   description = "EFS path file system"
 }
 
+
 variable "dynamodb_event_source_mappings" {
   description = "Event source mappings to allow the Lambda function to get events from Kinesis, DynamoDB and SQS. The IAM role of this Lambda function will be enhanced with necessary minimum permissions to get those events."
   type        = map(any)
 }
 
+variable "additional_version_weights" {
+  default     = {}
+  description = "Value to distribute the usability percentage (ej: 'version'=percentage '10'=0.5)"
+}
