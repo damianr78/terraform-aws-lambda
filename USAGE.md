@@ -17,12 +17,14 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| additional\_version\_weights | Value to distribute the usability percentage (ej: 'version'=percentage '10'=0.5) | `map` | `{}` | no |
 | artifact\_id | The id of the artifact (zip file) to be deployed without the .zip extension | `any` | n/a | yes |
 | artifact\_version | Version of the lambdas artifact | `string` | n/a | yes |
 | attach\_assume\_role\_policy | Boolean to indicate if the iam\_p\_assume\_role shoud be attached to the role | `bool` | `false` | no |
 | base\_policy\_arn | Base policy ARN to allow lambda to access logs and configs table | `string` | `""` | no |
 | dead\_letter\_queue\_name | Dead letter queue name including environment name | `string` | `""` | no |
 | dead\_letter\_queue\_resource | Dead letter queue resource. Only sqs and sns are allowed | `string` | `"sqs"` | no |
+| dynamodb\_event\_source\_mappings | Event source mappings to allow the Lambda function to get events from Kinesis, DynamoDB and SQS. The IAM role of this Lambda function will be enhanced with necessary minimum permissions to get those events. | `map(any)` | n/a | yes |
 | dynamodb\_trigger\_batch\_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation | `string` | `"100"` | no |
 | dynamodb\_trigger\_starting\_position | Starting position for dynamodb trigger | `string` | `"LATEST"` | no |
 | dynamodb\_trigger\_table\_stream\_arn | Table stream arn if enable\_dynamodb\_trigger is true | `string` | `""` | no |
