@@ -249,7 +249,7 @@ variable "additional_version_weights" {
   description = "Value to distribute the usability percentage (ej: 'version'=percentage '10'=0.5)"
 }
 
-variable "enable_resource_based_policy" {
+variable "enable_rbp" {
   description = "Creates a custom resource based policy for lambda."
   default     = false
 }
