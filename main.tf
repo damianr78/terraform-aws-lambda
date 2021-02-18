@@ -22,6 +22,16 @@ resource "aws_lambda_permission" "allow_cloudwatch_warm_up" {
   ]
 }
 
+resource "aws_lambda_permission" "resource_based_policy" {
+  count         = var.enable_rbp ? 1 : 0
+
+  statement_id  = var.rbp_statement_id
+  action        = var.rbp_action
+  function_name = local.function_name
+  qualifier     = module.lambda-label.environment_upper
+  principal     = var.rbp_principal
+}
+
 module "lambda-label" {
   source               = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.7"
   environment          = var.environment
