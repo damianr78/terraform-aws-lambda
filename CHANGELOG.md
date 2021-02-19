@@ -1,3 +1,7 @@
+## 2.31
+### Added
+- Added support for resource based policy definition
+
 ## 2.29
 ### Added
 - Added routing_config and variable additional_version_weights

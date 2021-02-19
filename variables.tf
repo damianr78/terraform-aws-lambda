@@ -248,3 +248,23 @@ variable "additional_version_weights" {
   default     = {}
   description = "Value to distribute the usability percentage (ej: 'version'=percentage '10'=0.5)"
 }
+
+variable "enable_rbp" {
+  description = "Creates a custom resource based policy for lambda."
+  default     = false
+}
+
+variable "rbp_statement_id" {
+  description = "Statement id for the resource based policy"
+  default     = "cross-account-invocation"
+}
+
+variable "rbp_action" {
+  description = "Action for the resource based policy"
+  default     = "lambda:InvokeFunction"
+}
+
+variable "rbp_principal" {
+  description = "The principal who is getting this permission"
+  default     = "events.amazonaws.com"
+}
