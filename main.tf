@@ -220,12 +220,19 @@ resource "aws_s3_bucket_notification" "s3_trigger" {
 
   bucket = var.s3_trigger_bucket
 
-  lambda_function {
-    lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
-    events              = var.s3_trigger_events
-    filter_prefix       = var.s3_trigger_key_prefix
-    filter_suffix       = var.s3_trigger_key_suffix
+  dynamic "lambda_function" {
+    for_each = var.lambda_notifications
+    
+    content {
+      id                  = lambda_function.key
+      lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
+      events              = lambda_function.value.events
+      filter_prefix       = lookup(lambda_function.value, "filter_prefix", null)
+      filter_suffix       = lookup(lambda_function.value, "filter_suffix", null)
+     }
   }
+  
+  
   depends_on = [
     aws_lambda_function.lambda
   ]
