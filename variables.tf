@@ -268,3 +268,9 @@ variable "rbp_principal" {
   description = "The principal who is getting this permission"
   default     = "events.amazonaws.com"
 }
+
+variable "lambda_notifications" {
+  description = "Map of S3 bucket notifications to Lambda function"
+  type        = any
+  default     = {}
+}
