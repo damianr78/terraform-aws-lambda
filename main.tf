@@ -269,6 +269,6 @@ resource "aws_lambda_permission" "allow_bucket_2" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda.function_name
   principal     = "s3.amazonaws.com"
-  source_arn    = var.s3_trigger_bucket_2_arn
+  source_arn    = var.s3_trigger_bucket_arn_2
   qualifier     = module.lambda-label.environment_upper
 }
