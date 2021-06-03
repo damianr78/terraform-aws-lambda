@@ -229,7 +229,7 @@ resource "aws_s3_bucket_notification" "s3_trigger" {
       filter_prefix       = var.s3_trigger_key_prefix
       filter_suffix       = var.s3_trigger_key_suffix
     }
-
+  }
   depends_on = [
     aws_lambda_permission.allow_bucket
   ]
