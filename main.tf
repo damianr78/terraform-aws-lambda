@@ -219,16 +219,12 @@ resource "aws_s3_bucket_notification" "s3_trigger" {
   count = var.enable_s3_trigger ? 1 : 0
 
   bucket = var.s3_trigger_bucket
-
-  dynamic "lambda_function" {
-    for_each = lambda_function
-    content {
-      id                  = aws_lambda_function.lambda.function_name
-      lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
-      events              = var.s3_trigger_events
-      filter_prefix       = var.s3_trigger_key_prefix
-      filter_suffix       = var.s3_trigger_key_suffix
-    }
+  
+  lambda_function {
+    lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
+    events              = var.s3_trigger_events
+    filter_prefix       = var.s3_trigger_key_prefix
+    filter_suffix       = var.s3_trigger_key_suffix
   }
   depends_on = [
     aws_lambda_permission.allow_bucket
@@ -243,5 +239,36 @@ resource "aws_lambda_permission" "allow_bucket" {
   function_name = aws_lambda_function.lambda.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = var.s3_trigger_bucket_arn
+  qualifier     = module.lambda-label.environment_upper
+}
+
+
+resource "aws_s3_bucket_notification" "s3_trigger_2" {
+  count = var.enable_s3_trigger_2 ? 1 : 0
+
+  bucket = var.s3_trigger_bucket_2
+  
+ 
+  lambda_function {
+    lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
+    events              = var.s3_trigger_events
+    filter_prefix       = var.s3_trigger_key_prefix
+    filter_suffix       = var.s3_trigger_key_suffix
+  }
+
+  depends_on = [
+    aws_lambda_permission.allow_bucket_2
+  ]
+}
+
+
+resource "aws_lambda_permission" "allow_bucket_2 {
+  count = var.enable_s3_trigger ? 1 : 0
+
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda.function_name
+  principal     = "s3.amazonaws.com"
+  source_arn    = var.s3_trigger_bucket_2_arn
   qualifier     = module.lambda-label.environment_upper
 }

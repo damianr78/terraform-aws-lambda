@@ -176,6 +176,23 @@ variable "s3_trigger_bucket_arn" {
   default     = ""
 }
 
+variable "enable_s3_trigger_2" {
+  description = "Enable s3 trigger for lambda"
+  default     = false
+}
+
+variable "s3_trigger_bucket_2" {
+  description = "S3 Bucket that triggers lambda"
+  type        = string
+  default     = ""
+}
+
+variable "s3_trigger_bucket_arn_2" {
+  description = "S3 Bucket ARN that triggers lambda"
+  type        = string
+  default     = ""
+}
+
 variable "s3_trigger_events" {
   description = "List of events that invoke lambda function"
   type        = list(string)
