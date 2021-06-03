@@ -219,7 +219,7 @@ resource "aws_s3_bucket_notification" "s3_trigger" {
   count = var.enable_s3_trigger ? 1 : 0
 
   bucket = var.s3_trigger_bucket
-  
+
   lambda_function {
     lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
     events              = var.s3_trigger_events
@@ -247,8 +247,8 @@ resource "aws_s3_bucket_notification" "s3_trigger_2" {
   count = var.enable_s3_trigger_2 ? 1 : 0
 
   bucket = var.s3_trigger_bucket_2
-  
- 
+
+
   lambda_function {
     lambda_function_arn = "${aws_lambda_function.lambda.arn}:${module.lambda-label.environment_upper}"
     events              = var.s3_trigger_events
