@@ -262,7 +262,7 @@ resource "aws_s3_bucket_notification" "s3_trigger_2" {
 }
 
 
-resource "aws_lambda_permission" "allow_bucket_2 {
+resource "aws_lambda_permission" "allow_bucket_2" {
   count = var.enable_s3_trigger_2 ? 1 : 0
 
   statement_id  = "AllowExecutionFromS3Bucket"
