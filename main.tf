@@ -181,7 +181,7 @@ resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
   name                = local.rule_name
   description         = "Warm up rule for lambda ${local.function_name}"
   schedule_expression = "rate(5 minutes)"
-  tags                = merge(toMap({"Name" = local.rule_name}), {})
+  tags                = merge(tomap({"Name" = local.rule_name}), {})
 
   depends_on = [
     aws_lambda_function.lambda
