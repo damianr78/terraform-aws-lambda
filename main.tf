@@ -33,7 +33,7 @@ resource "aws_lambda_permission" "resource_based_policy" {
 }
 
 module "lambda-label" {
-  source               = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/2.7"
+  source               = "git@github.com:Bancar/terraform-label.git//lambda?ref=upgrade-terraform-0.15"
   environment          = var.environment
   artifact_id          = var.artifact_id
   artifact_version     = var.artifact_version
@@ -181,7 +181,7 @@ resource "aws_cloudwatch_event_rule" "lambda_cloudwatch_rule" {
   name                = local.rule_name
   description         = "Warm up rule for lambda ${local.function_name}"
   schedule_expression = "rate(5 minutes)"
-  tags                = merge(map("Name", local.rule_name), {})
+  tags                = merge(toMap({"Name" = local.rule_name}), {})
 
   depends_on = [
     aws_lambda_function.lambda
