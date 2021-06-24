@@ -16,14 +16,14 @@ module "Lambda" {
   function_description = "Description of function name"
 
   environment_variables = {
-    "AUTHORIZATION_SNS_ARN" = "${var.AuthorizationTopic_arn}"
+    "AUTHORIZATION_SNS_ARN" = var.AuthorizationTopic_arn
   }
 
-  lambda_policy_json = "${data.aws_iam_policy_document.create_credit_authorization_policy_document.json}"
+  lambda_policy_json = data.aws_iam_policy_document.create_credit_authorization_policy_document.json
 
-  stage               = "${var.environment}"
-  artifacts_bucket    = "${var.artifacts_bucket}"
-  artifact_key_prefix = "${var.artifacts_key_prefix}"
+  stage               = var.environment
+  artifacts_bucket    = var.artifacts_bucket
+  artifact_key_prefix = var.artifacts_key_prefix
 }
 ```
 
