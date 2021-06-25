@@ -1,3 +1,6 @@
+## 3.0
+- Upgraded to terraform v1.0.0
+
 ## 2.31
 ### Added
 - Added support for resource based policy definition

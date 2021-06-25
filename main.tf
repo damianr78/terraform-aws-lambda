@@ -30,10 +30,11 @@ resource "aws_lambda_permission" "resource_based_policy" {
   function_name = local.function_name
   qualifier     = module.lambda-label.environment_upper
   principal     = var.rbp_principal
+  source_arn    = var.rbp_source_arn
 }
 
 module "lambda-label" {
-  source               = "git@github.com:Bancar/terraform-label.git//lambda?ref=upgrade-terraform-v1.0.0"
+  source               = "git@github.com:Bancar/terraform-label.git//lambda?ref=tags/3.0"
   environment          = var.environment
   artifact_id          = var.artifact_id
   artifact_version     = var.artifact_version
