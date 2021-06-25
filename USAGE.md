@@ -17,6 +17,7 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| additional\_version\_weights | Value to distribute the usability percentage (ej: 'version'=percentage '10'=0.5) | `map` | `{}` | no |
 | artifact\_id | The id of the artifact (zip file) to be deployed without the .zip extension | `any` | n/a | yes |
 | artifact\_version | Version of the lambdas artifact | `string` | n/a | yes |
 | attach\_assume\_role\_policy | Boolean to indicate if the iam\_p\_assume\_role shoud be attached to the role | `bool` | `false` | no |
@@ -29,6 +30,7 @@
 | efs\_arn | EFS ARN file system | `string` | `""` | no |
 | efs\_local\_mount\_path | EFS path file system | `string` | `""` | no |
 | enable\_dynamodb\_trigger | Enable dynamodb trigger for lambda | `bool` | `false` | no |
+| enable\_rbp | Creates a custom resource based policy for lambda. | `bool` | `false` | no |
 | enable\_s3\_trigger | Enable s3 trigger for lambda | `bool` | `false` | no |
 | enable\_sqs\_trigger | Enable sqs trigger for lambda | `bool` | `false` | no |
 | environment | Environment name to use on all resources created (API-Gateway, Lambdas, etc.) | `any` | n/a | yes |
@@ -44,6 +46,10 @@
 | prefix\_function\_name | Prefix for function name, e.g. 'prefix-create-credit-transaction-aws-lambda' | `string` | `""` | no |
 | product\_bucket | S3 Bucket containing the lambda zip files | `any` | n/a | yes |
 | proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | `bool` | `false` | no |
+| rbp\_action | Action for the resource based policy | `string` | `"lambda:InvokeFunction"` | no |
+| rbp\_principal | The principal who is getting this permission | `string` | `"events.amazonaws.com"` | no |
+| rbp\_source\_arn | The principal's ARN | `any` | n/a | yes |
+| rbp\_statement\_id | Statement id for the resource based policy | `string` | `"cross-account-invocation"` | no |
 | repo\_name | Name of repository who contains JAVA code of lambda | `any` | n/a | yes |
 | reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1 | `number` | `-1` | no |
 | rule\_arn | arn of rule | `string` | `""` | no |
