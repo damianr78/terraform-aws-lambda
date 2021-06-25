@@ -46,18 +46,6 @@ variable "environment_variables" {
   }
 }
 
-# variable "security_group_ids" {
-#   type        = list(string)
-#   description = "Security groups ids for VPC"
-#   default     = []
-# }
-
-# variable "subnet_ids" {
-#   type        = list(string)
-#   description = "Subnet ids for VPC"
-#   default     = []
-# }
-
 variable "subnet_ids" {
   description = "List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets."
   type        = list(string)
@@ -144,7 +132,7 @@ variable "rule_arn" {
 variable "tags" {
   type        = map(string)
   default     = {}
-  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)"
+  description = "Additional tags (e.g. tomap({\"BusinessUnit\" = \"XYZ\"}) )"
 }
 
 variable "policy_lambda_vars" {

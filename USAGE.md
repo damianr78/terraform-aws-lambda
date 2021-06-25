@@ -4,7 +4,7 @@
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12 |
+| terraform | >= 1.0.0 |
 
 ## Providers
 
@@ -58,7 +58,7 @@
 | sqs\_trigger\_batch\_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation. | `number` | `1` | no |
 | sqs\_trigger\_queue\_arn | SQS arn if enable\_sqs\_trigger is true | `string` | `""` | no |
 | subnet\_ids | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | `list(string)` | `[]` | no |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`) | `map(string)` | `{}` | no |
+| tags | Additional tags (e.g. tomap({"BusinessUnit" = "XYZ"}) ) | `map(string)` | `{}` | no |
 | timeout | Lambda timeout time in seconds | `string` | `"900"` | no |
 | use\_configs\_table | Flag to enable use to configs table | `bool` | `true` | no |
 | warm\_up\_available\_environments | Environments where warm up will be created | `list(string)` | <pre>[<br>  "PROD",<br>  "STAGE"<br>]</pre> | no |
