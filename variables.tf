@@ -259,4 +259,5 @@ variable "rbp_principal" {
 
 variable "rbp_source_arn" {
   description = "The principal's ARN"
+  default     = ""
 }

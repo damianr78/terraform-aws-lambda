@@ -48,7 +48,7 @@
 | proxy | Boolean to differentiate between normal lambdas and proxy and send a different warm-up event | `bool` | `false` | no |
 | rbp\_action | Action for the resource based policy | `string` | `"lambda:InvokeFunction"` | no |
 | rbp\_principal | The principal who is getting this permission | `string` | `"events.amazonaws.com"` | no |
-| rbp\_source\_arn | The principal's ARN | `any` | n/a | yes |
+| rbp\_source\_arn | The principal's ARN | `string` | `""` | no |
 | rbp\_statement\_id | Statement id for the resource based policy | `string` | `"cross-account-invocation"` | no |
 | repo\_name | Name of repository who contains JAVA code of lambda | `any` | n/a | yes |
 | reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1 | `number` | `-1` | no |
