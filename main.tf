@@ -30,6 +30,7 @@ resource "aws_lambda_permission" "resource_based_policy" {
   function_name = local.function_name
   qualifier     = module.lambda-label.environment_upper
   principal     = var.rbp_principal
+  source_arn    = var.rbp_source_arn
 }
 
 module "lambda-label" {

@@ -256,3 +256,7 @@ variable "rbp_principal" {
   description = "The principal who is getting this permission"
   default     = "events.amazonaws.com"
 }
+
+variable "rbp_source_arn" {
+  description = "The principal's ARN"
+}
