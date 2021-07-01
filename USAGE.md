@@ -2,9 +2,7 @@
 <!--- BEGIN_TF_DOCS --->
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 1.0.0 |
+No requirements.
 
 ## Providers
 
@@ -66,7 +64,6 @@
 | subnet\_ids | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | `list(string)` | `[]` | no |
 | tags | Additional tags (e.g. tomap({"BusinessUnit" = "XYZ"}) ) | `map(string)` | `{}` | no |
 | timeout | Lambda timeout time in seconds | `string` | `"900"` | no |
-| use\_configs\_table | Flag to enable use to configs table | `bool` | `true` | no |
 | warm\_up\_available\_environments | Environments where warm up will be created | `list(string)` | <pre>[<br>  "PROD",<br>  "STAGE"<br>]</pre> | no |
 
 ## Outputs

@@ -114,10 +114,10 @@ variable "dead_letter_queue_resource" {
   default     = "sqs"
 }
 
-variable "use_configs_table" {
-  description = "Flag to enable use to configs table"
-  default     = true
-}
+# variable "use_configs_table" {
+#   description = "Flag to enable use to configs table"
+#   default     = true
+# }
 
 variable "base_policy_arn" {
   description = "Base policy ARN to allow lambda to access logs and configs table"
