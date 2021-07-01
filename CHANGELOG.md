@@ -1,3 +1,7 @@
+## 3.1
+- Update Readme
+- Delete Versions File
+
 ## 3.0
 - Upgraded to terraform v1.0.0
 
