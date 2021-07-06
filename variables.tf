@@ -86,7 +86,7 @@ variable "permissions_to_invoke" {
 
 variable "timeout" {
   description = "Lambda timeout time in seconds"
-  default     = "900"
+  default     = "30"
 }
 
 variable "memory_size" {
